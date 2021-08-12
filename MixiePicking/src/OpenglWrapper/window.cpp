@@ -2,6 +2,7 @@
 
 #include "wrap/glwidget.h"
 #include "../mainwindow.h"
+#include "../Picking/picker.h"
 #include <QSlider>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -40,7 +41,7 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     ySlider->setValue(345 * 16);
     zSlider->setValue(0 * 16);
 
-    setWindowTitle(tr("TestPicking"));
+    setWindowTitle(tr("TestPicking!!!"));
 }
 
 void Window::keyPressEvent(QKeyEvent *event)

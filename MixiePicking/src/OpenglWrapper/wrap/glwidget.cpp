@@ -9,7 +9,7 @@
 GlWidget::GlWidget(QWidget *parent)
     : QOpenGLWidget(parent)
 {
-    //m_core = QSurfaceFormat::defaultFormat().profile() == QSurfaceFormat::CoreProfile;
+
 }
 
 GlWidget::~GlWidget()
@@ -97,29 +97,20 @@ static const char *fragmentShaderSourceCore =
     "in highp vec3 vertNormal;\n"
     "out highp vec4 fragColor;\n"
     "uniform highp vec3 lightPos;\n"
+    "uniform highp vec3 fastOutLine;\n"
     "void main() {\n"
     "   highp vec3 L = normalize(lightPos - vert);\n"
     "   highp float NL = max(dot(normalize(vertNormal), L), 0.0);\n"
     "   highp vec3 color = vec3(0.39, 1.0, 0.0);\n"
     "   highp vec3 col = clamp(color * 0.2 + color * 0.8 * NL, 0.0, 1.0);\n"
-    "   fragColor = vec4(col, 1.0);\n"
+    "   fragColor = vec4(col + fastOutLine, 1.0);\n"
     "}\n";
 
 void GlWidget::initializeGL()
 {
-    // In this example the widget's corresponding top-level window can change
-    // several times during the widget's lifetime. Whenever this happens, the
-    // QOpenGlWidget's associated context is destroyed and a new one is created.
-    // Therefore we have to be prepared to clean up the resources on the
-    // aboutToBeDestroyed() signal, instead of the destructor. The emission of
-    // the signal will be followed by an invocation of initializeGL() where we
-    // can recreate all resources.
-    connect(context(), &QOpenGLContext::aboutToBeDestroyed, this, &GlWidget::cleanup);
-
     initializeOpenGLFunctions();
 
-
-    qDebug() << glGetString(GL_VERSION) << "!\n";
+    qDebug() << (char*)(glGetString(GL_VERSION)) << "!\n";
 
 
     glClearColor(0, 0, 0, 1);
@@ -136,11 +127,8 @@ void GlWidget::initializeGL()
     m_mvMatrixLoc = m_program->uniformLocation("mvMatrix");
     m_normalMatrixLoc = m_program->uniformLocation("normalMatrix");
     m_lightPosLoc = m_program->uniformLocation("lightPos");
+    m_outLineLoc = m_program->uniformLocation("fastOutLine");
 
-    // Create a vertex array object. In OpenGL ES 2.0 and OpenGL 2.x
-    // implementations this is optional and support may not be present
-    // at all. Nonetheless the below code works in all cases and makes
-    // sure there is a VAO when one is needed.
     m_vao.create();
     QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);
 
@@ -159,6 +147,8 @@ void GlWidget::initializeGL()
     // Light position is fixed.
     m_program->setUniformValue(m_lightPosLoc, QVector3D(0, 0, 70));
 
+    m_program->setUniformValue(m_outLineLoc, QVector3D(0, 1, 0));
+
     m_program->release();
 }
 
@@ -174,8 +164,6 @@ void GlWidget::setupVertexAttribs()
                              reinterpret_cast<void *>(3 * sizeof(GLfloat)));
     m_logoVbo.release();
 }
-
-#include <QPainter>
 
 void GlWidget::paintGL()
 {
@@ -211,13 +199,21 @@ void GlWidget::mousePressEvent(QMouseEvent *event)
 {
     qDebug() << "Pick\n";
     picker.getEvent(testObj.getVertex(),event,m_proj,m_world,m_camera);
-    m_lastPos = event->position().toPoint();
+    m_program->bind();
+    if(picker.isPick){
+      m_program->setUniformValue(m_outLineLoc, QVector3D(1, 0, 0));
+    }else{
+       m_program->setUniformValue(m_outLineLoc, QVector3D(0, 1, 0));
+    }
+    m_program->release();
+
+    m_lastPos = event->pos();
 }
 
 void GlWidget::mouseMoveEvent(QMouseEvent *event)
 {
-   int dx = event->position().toPoint().x() - m_lastPos.x();
-   int dy = event->position().toPoint().y() - m_lastPos.y();
+   int dx = event->pos().x() - m_lastPos.x();
+   int dy = event->pos().y() - m_lastPos.y();
 
    if (event->buttons() & Qt::LeftButton) {
        setXRotation(m_xRot + 8 * dy);
@@ -226,5 +222,5 @@ void GlWidget::mouseMoveEvent(QMouseEvent *event)
        setXRotation(m_xRot + 8 * dy);
        setZRotation(m_zRot + 8 * dx);
    }
-   m_lastPos = event->position().toPoint();
+   m_lastPos = event->pos();
 }

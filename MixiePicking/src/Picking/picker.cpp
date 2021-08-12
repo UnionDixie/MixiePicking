@@ -1,41 +1,56 @@
 #include "picker.h"
 
+
 Picker::Picker()
 {
 
 }
 
-void Picker::getEvent(QList<QVector3D> &data, QMouseEvent *event, QMatrix4x4 &proj, QMatrix4x4 &world, QMatrix4x4 &cam)
+void Picker::getEvent(QVector<QVector3D> &data, QMouseEvent *event, QMatrix4x4 &proj, QMatrix4x4 &world, QMatrix4x4 &cam)
 {
     if (event->buttons() & Qt::LeftButton) {
-      vMatrix.clear();
-      vMatrix.push_back(proj);
-      vMatrix.push_back(cam);
-      vMatrix.push_back(world);
+      //vMatrix.clear();
+      //vMatrix.push_back(proj);
+      //vMatrix.push_back(cam);
+      //vMatrix.push_back(world);
 
-      const int w = 400, h = 400;
-      double mx = event->position().x(), my = event->position().y();
+      rayCheker(data,event,proj,world,cam,rayIntersectsTriangle);
 
-      QVector3D worldNear = QVector3D(float(mx), float(h - my), 0.0f).unproject(cam * world, proj, QRect(0,0,400,400));
-      // Mouse world pos on far plane
-      QVector3D worldFar = QVector3D(float(mx), float(h - my), 1.0f).unproject(cam * world, proj, QRect(0,0,400,400));
-      QVector3D rayDir = (worldFar - worldNear).normalized();
-
-      for(int i = 0;i <= data.size() - 3;i+=3){
-         QVector3D f1 = QVector3D(data[i]);//a
-         QVector3D f2 = QVector3D(data[i+1]);//b
-         QVector3D f3 = QVector3D(data[i+2]);//c
-
-         float currIntersectionPos;
-         if (rayIntersectsTriangle(worldNear, rayDir, f1, f2, f3, &currIntersectionPos))
-         {
-             qDebug() << "\tIntersection " << "numIntersections" << ": Triangle "
-                      << i << " intersected at ray pos " << currIntersectionPos;
-         }
-      }
     }
 }
 
+QVector3D Picker::getOrgDirRay(QMouseEvent *event, QMatrix4x4 &proj, QMatrix4x4 &world, QMatrix4x4 &cam, QVector3D &orgn)
+{
+    const int w = 400, h = 400;
+    double mx = event->pos().x(), my = event->pos().y();
+    QVector3D worldNear = QVector3D(float(mx), float(h - my), 0.0f).unproject(cam * world, proj, QRect(0,0,w,h));
+    // Mouse world pos on far plane
+    QVector3D worldFar = QVector3D(float(mx), float(h - my), 1.0f).unproject(cam * world, proj, QRect(0,0,w,h));
+    QVector3D rayDir = (worldFar - worldNear).normalized();
+    orgn = worldNear;
+    return rayDir;
+}
+
+void Picker::rayCheker(QVector<QVector3D> &data, QMouseEvent *event, QMatrix4x4 &proj, QMatrix4x4 &world, QMatrix4x4 &cam,
+                       std::function<bool (QVector3D, QVector3D, QVector3D, QVector3D, QVector3D, float *)> rayCast)
+{
+    QVector3D worldNear;
+    QVector3D rayDir = getOrgDirRay(event,proj,world,cam,worldNear);
+    isPick  = false;
+    for(int i = 0;i <= data.size() - 3;i+=3){
+       QVector3D f1 = QVector3D(data[i]);//a
+       QVector3D f2 = QVector3D(data[i+1]);//b
+       QVector3D f3 = QVector3D(data[i+2]);//c
+
+       float currIntersectionPos;
+       if (rayCast(worldNear, rayDir, f1, f2, f3, &currIntersectionPos))
+       {
+           qDebug() << "\tIntersection " << ": Triangle "
+                    << i << " intersected at ray pos " << currIntersectionPos;
+           isPick = true;
+       }
+    }
+}
 
 // Moller–Trumbore intersection algorithm
 bool Picker::rayIntersectsTriangle(QVector3D origin, QVector3D dir, QVector3D v0, QVector3D v1, QVector3D v2, float* intersection)
@@ -47,7 +62,6 @@ bool Picker::rayIntersectsTriangle(QVector3D origin, QVector3D dir, QVector3D v0
     const float epsilon = 0.000001f;
 
     QVector3D P, Q;
-    //float i;
     double t;
 
     // Calculate determinant

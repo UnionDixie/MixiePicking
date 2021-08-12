@@ -7,6 +7,7 @@
 #include <QOpenGLBuffer>
 #include <QMatrix4x4>
 #include <QOpenGLShaderProgram>
+
 #include "../MixiePicking/src/Picking/picker.h"
 #include "../MixiePicking/src/obj/testobject.h"
 
@@ -17,7 +18,6 @@ public:
     GlWidget(QWidget *parent = nullptr);
     ~GlWidget();
 
-
     QSize minimumSizeHint() const override;
     QSize sizeHint() const override;
 
@@ -26,7 +26,6 @@ public slots:
     void setYRotation(int angle);
     void setZRotation(int angle);
     void cleanup();
-
 signals:
     void xRotationChanged(int angle);
     void yRotationChanged(int angle);
@@ -38,9 +37,9 @@ protected:
     void resizeGL(int width, int height) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
-
 private:
     void setupVertexAttribs();
+private:
     Picker picker;
     TestObject testObj;
     //bool m_core;
@@ -56,6 +55,7 @@ private:
     int m_mvMatrixLoc = 0;
     int m_normalMatrixLoc = 0;
     int m_lightPosLoc = 0;
+    int m_outLineLoc = 0;
     QMatrix4x4 m_proj;
     QMatrix4x4 m_camera;
     QMatrix4x4 m_world;

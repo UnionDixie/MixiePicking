@@ -4,7 +4,7 @@
 
 TestObject::TestObject()
 {
-    m_data.resize(2500 * 6);
+    //m_data.resize(2500 * 6);
     //m_data.resize(3 * 6);
 
     const GLfloat x1 = +0.06f;
@@ -53,24 +53,21 @@ TestObject::TestObject()
     }
 }
 
-QList<QVector3D> &TestObject::getVertex()
+QVector<QVector3D> &TestObject::getVertex()
 {
-   return data2;
+   return vertex;
 }
 
 void TestObject::add(const QVector3D &v, const QVector3D &n)
 {
-    //if(m_count < 18){
-        GLfloat *p = m_data.data() + m_count;
-        data2.push_back(v);
-        *p++ = v.x();
-        *p++ = v.y();
-        *p++ = v.z();
-        *p++ = n.x();
-        *p++ = n.y();
-        *p++ = n.z();
-        m_count += 6;
-    //}
+    vertex.push_back(v);
+    m_data.push_back(v.x());
+    m_data.push_back(v.y());
+    m_data.push_back(v.z());
+    m_data.push_back(n.x());
+    m_data.push_back(n.y());
+    m_data.push_back(n.z());
+    m_count += 6;
 }
 
 void TestObject::quad(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3, GLfloat x4, GLfloat y4)

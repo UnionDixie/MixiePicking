@@ -20,9 +20,9 @@ private:
 private:
     MainWindow *mainWindow = nullptr;
     GlWidget *glWidget = nullptr;
-    QSlider *xSlider = nullptr;
-    QSlider *ySlider = nullptr;
-    QSlider *zSlider = nullptr;
+    QSlider  *xSlider = nullptr;
+    QSlider  *ySlider = nullptr;
+    QSlider  *zSlider = nullptr;
 };
 
 #endif // WINDOW_H

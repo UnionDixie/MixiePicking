@@ -1,5 +1,6 @@
 #include "picker.h"
 
+#include "../MixiePicking/src/OpenglWrapper/Object/Object.h"
 
 Picker::Picker()
 {
@@ -15,6 +16,35 @@ void Picker::getEvent(QVector<QVector3D> &data, QMouseEvent *event, QMatrix4x4 &
       //vMatrix.push_back(world);
 
       rayCheker(data,event,proj,world,cam,rayIntersectsTriangle);
+
+    }
+}
+
+void Picker::checkScence(std::vector<Object>& data, QMouseEvent* event, QMatrix4x4& proj, QMatrix4x4& world, QMatrix4x4& cam)
+{
+    if (event->buttons() & Qt::LeftButton) {
+
+        QVector3D worldNear;
+        QVector3D rayDir = getOrgDirRay(event, proj, world, cam, worldNear);
+        isPick = false;
+
+        for (auto& it : data) {
+            const auto&  vertex = it.data();
+            for (size_t i = 0; i < vertex.size() - 3; i+=3)
+            {
+                QVector3D f1 = QVector3D(vertex[i]);//a
+                QVector3D f2 = QVector3D(vertex[i + 1]);//b
+                QVector3D f3 = QVector3D(vertex[i + 2]);//c
+
+                float currIntersectionPos;
+                if (rayIntersectsTriangle(worldNear, rayDir, f1, f2, f3, &currIntersectionPos))
+                {
+                    qDebug() << "\tIntersection " << "Obj:"<< it.path <<": Triangle "
+                             << i << " intersected at ray pos " << currIntersectionPos;
+                    isPick = true;
+                }
+            }
+        }
 
     }
 }

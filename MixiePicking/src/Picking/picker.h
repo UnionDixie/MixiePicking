@@ -8,11 +8,14 @@
 #include <QMatrix4x4>
 #include <functional>
 
+class Object;
+
 class Picker
 {
 public:
     Picker();
     void getEvent(QVector<QVector3D>& data,QMouseEvent *event,QMatrix4x4& proj,QMatrix4x4& world,QMatrix4x4& cam);
+    void checkScence(std::vector<Object>& data, QMouseEvent* event, QMatrix4x4& proj, QMatrix4x4& world, QMatrix4x4& cam);
     bool isPick;
 private:
     QVector3D getOrgDirRay(QMouseEvent *event, QMatrix4x4 &proj, QMatrix4x4 &world, QMatrix4x4 &cam,QVector3D& orgn);

@@ -6,10 +6,11 @@
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
 #include <QMatrix4x4>
-#include <QOpenGLShaderProgram>
 
 #include "../MixiePicking/src/Picking/picker.h"
 #include "../MixiePicking/src/obj/testobject.h"
+#include "../MixiePicking/src/OpenglWrapper/shader/Shader.h"
+#include "../MixiePicking/src/OpenglWrapper/Object/Object.h"
 
 class GlWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -42,20 +43,16 @@ private:
 private:
     Picker picker;
     TestObject testObj;
-    //bool m_core;
+    Shader simpleShader;
     int m_xRot = 0;
     int m_yRot = 0;
     int m_zRot = 0;
     QPoint m_lastPos;
     QOpenGLVertexArrayObject m_vao;
-    int shaderProgram;
     QOpenGLBuffer m_logoVbo;
-    QOpenGLShaderProgram *m_program = nullptr;
-    int m_projMatrixLoc = 0;
-    int m_mvMatrixLoc = 0;
-    int m_normalMatrixLoc = 0;
-    int m_lightPosLoc = 0;
-    int m_outLineLoc = 0;
+    
+    std::vector<Object> objects;
+    
     QMatrix4x4 m_proj;
     QMatrix4x4 m_camera;
     QMatrix4x4 m_world;

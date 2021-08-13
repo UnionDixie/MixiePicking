@@ -6,9 +6,10 @@
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-
 public:
     MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    ~MainWindow() = default;
+public slots:
+    void closeWindow();
 };
 #endif // MAINWINDOW_H

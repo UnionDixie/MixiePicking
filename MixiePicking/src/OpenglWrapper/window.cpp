@@ -3,6 +3,7 @@
 #include "wrap/glwidget.h"
 #include "../mainwindow.h"
 #include "../Picking/picker.h"
+
 #include <QSlider>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -24,6 +25,8 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     connect(zSlider, &QSlider::valueChanged, glWidget, &GlWidget::setZRotation);
     connect(glWidget, &GlWidget::zRotationChanged, zSlider, &QSlider::setValue);
 
+    connect(this, &Window::closeWin, mw, &MainWindow::closeWindow);
+
     QVBoxLayout *mainLayout = new QVBoxLayout;
     QHBoxLayout *container = new QHBoxLayout;
     container->addWidget(glWidget);
@@ -36,18 +39,18 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     mainLayout->addWidget(w);
 
     setLayout(mainLayout);
-
+    //default postinon for sliders
     xSlider->setValue(15 * 16);
     ySlider->setValue(345 * 16);
     zSlider->setValue(0 * 16);
 
-    setWindowTitle(tr("TestPicking!!!"));
+    setWindowTitle(tr("TestPicking!!!"));//not work!! fix
 }
 
 void Window::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Escape)
-        close();
+        emit closeWin();//close();
     else
         QWidget::keyPressEvent(event);
 }

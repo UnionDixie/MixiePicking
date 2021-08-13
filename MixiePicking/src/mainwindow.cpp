@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     QMenuBar *menuBar = new QMenuBar;
-    QMenu *menuWindow = menuBar->addMenu(tr("File"));
+    QMenu *menuWindow = menuBar->addMenu("File");
     QAction *addNew = new QAction(menuWindow);
     addNew->setText(tr("Open"));
     menuWindow->addAction(addNew);
@@ -17,10 +17,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     if (!centralWidget())
         setCentralWidget(new Window(this));
-
 }
 
-MainWindow::~MainWindow()
+void MainWindow::closeWindow()
 {
+    close();
 }
-

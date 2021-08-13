@@ -12,17 +12,18 @@ class Window : public QWidget
     Q_OBJECT
 public:
     explicit Window(MainWindow *mw = nullptr);
-
 protected:
     void keyPressEvent(QKeyEvent *event) override;
+signals:
+    void closeWin();
 private:
      QSlider *createSlider();
 private:
     MainWindow *mainWindow = nullptr;
-    GlWidget *glWidget = nullptr;
-    QSlider  *xSlider = nullptr;
-    QSlider  *ySlider = nullptr;
-    QSlider  *zSlider = nullptr;
+    GlWidget   *glWidget   = nullptr;
+    QSlider    *xSlider    = nullptr;
+    QSlider    *ySlider    = nullptr;
+    QSlider    *zSlider    = nullptr;
 };
 
 #endif // WINDOW_H

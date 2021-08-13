@@ -70,7 +70,7 @@ void Object::update(const QMatrix4x4& world, const QMatrix4x4& proj, const QMatr
     shader.setValue("mv", cam * world);
     QMatrix3x3 normalMatrix = world.normalMatrix(); //for light
     shader.setValue("norm", normalMatrix);
-    shader.setValue("pick", QVector3D(1, 0, 0));
+    //shader.setValue("pick", QVector3D(0, 0, 1));
     shader.release();
 }
 
@@ -93,5 +93,19 @@ void Object::draw(const QMatrix4x4& world, const QMatrix4x4& proj, const QMatrix
         glDrawElements(GL_TRIANGLES, loader.getTriangleList().count(), GL_UNSIGNED_INT, nullptr);
     }
 
+    shader.release();
+}
+
+void Object::click()
+{
+    shader.bind();
+    shader.setValue("pick", QVector3D(1, 0, 0));
+    shader.release();
+}
+
+void Object::unclick()
+{
+    shader.bind();
+    shader.setValue("def", QVector3D(0, 1, 0));
     shader.release();
 }

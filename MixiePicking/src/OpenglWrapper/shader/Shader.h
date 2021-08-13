@@ -39,7 +39,7 @@ inline void Shader::setValue(QString id, const T& value)
 	else if (id == "norm")
 		m_program->setUniformValue(m_normalMatrixLoc, value);
 	else if (id == "pick")
-		m_program->setUniformValue(m_outLineLoc, QVector3D(1, 0, 0));
+		m_program->setUniformValue(m_outLineLoc, value);
 	else 
-		m_program->setUniformValue(m_outLineLoc, QVector3D(0, 1, 0));
+		m_program->setUniformValue(m_outLineLoc, value);
 }

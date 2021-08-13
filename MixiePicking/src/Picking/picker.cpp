@@ -27,7 +27,7 @@ void Picker::checkScence(std::vector<Object>& data, QMouseEvent* event, QMatrix4
         QVector3D worldNear;
         QVector3D rayDir = getOrgDirRay(event, proj, world, cam, worldNear);
         isPick = false;
-
+        int k = 0;
         for (auto& it : data) {
             const auto&  vertex = it.data();
             for (size_t i = 0; i < vertex.size() - 3; i+=3)
@@ -42,8 +42,10 @@ void Picker::checkScence(std::vector<Object>& data, QMouseEvent* event, QMatrix4
                     qDebug() << "\tIntersection " << "Obj:"<< it.path <<": Triangle "
                              << i << " intersected at ray pos " << currIntersectionPos;
                     isPick = true;
+                    id = k;
                 }
             }
+            k++;
         }
 
     }

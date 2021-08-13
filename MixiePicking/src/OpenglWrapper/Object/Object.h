@@ -31,6 +31,9 @@ public:
 
 	void draw(const QMatrix4x4& world, const QMatrix4x4& proj, const QMatrix4x4& cam);
 
+	void click();
+	void unclick();
+
 	QString path;
 private:
 	void update(const QMatrix4x4& world, const QMatrix4x4& proj, const QMatrix4x4& cam);

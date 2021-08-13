@@ -171,15 +171,19 @@ void GlWidget::mousePressEvent(QMouseEvent *event)
 
     //picker.getEvent(testObj.getVertex(), event, m_proj, m_world, m_camera);
 
-
     picker.checkScence(objects, event, m_proj, m_world, m_camera);
 
-    simpleShader.bind();
+    /*simpleShader.bind();
     if (picker.isPick)
         simpleShader.setValue("pick", QVector3D(1, 0, 0));
     else
         simpleShader.setValue("def", QVector3D(0, 1, 0));
-    simpleShader.release();
+        simpleShader.release();*/
+    if (picker.isPick)
+        objects[picker.id].click();
+    else
+        objects[picker.id].unclick();
+    
 
     m_lastPos = event->pos();
 }

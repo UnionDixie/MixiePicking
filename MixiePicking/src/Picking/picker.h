@@ -17,6 +17,7 @@ public:
     void getEvent(QVector<QVector3D>& data,QMouseEvent *event,QMatrix4x4& proj,QMatrix4x4& world,QMatrix4x4& cam);
     void checkScence(std::vector<Object>& data, QMouseEvent* event, QMatrix4x4& proj, QMatrix4x4& world, QMatrix4x4& cam);
     bool isPick;
+    int id = -1;
 private:
     QVector3D getOrgDirRay(QMouseEvent *event, QMatrix4x4 &proj, QMatrix4x4 &world, QMatrix4x4 &cam,QVector3D& orgn);
     void rayCheker(QVector<QVector3D> &data, QMouseEvent *event, QMatrix4x4 &proj, QMatrix4x4 &world, QMatrix4x4 &cam,

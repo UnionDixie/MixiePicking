@@ -10,8 +10,8 @@ public:
 	Loader() = default;
 	~Loader() = default;
 	void load(const QString& path);
-	const QVector<QVector3D>& getVertexList();
-	const QVector<unsigned int>& getTriangleList();
+	const QVector<QVector3D>& getVertexList() const;
+	const QVector<unsigned int>& getTriangleList() const;
 private:
 	void add(const QString& row);
 private:

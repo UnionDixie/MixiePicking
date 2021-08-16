@@ -11,21 +11,19 @@ public:
 	~Shader() = default;
 	void init();
 	void bind();
+	void release();
 	template<typename T>
 	void setValue(QString id,const T& value);
-	void release();
 	void destroy();
 public:
 	bool isDestroy;
 private:
 	QOpenGLShaderProgram* m_program = nullptr;
-
-	int m_projMatrixLoc = 0;
-	int m_mvMatrixLoc = 0;
-	int m_normalMatrixLoc = 0;
-	int m_lightPosLoc = 0;
-	int m_outLineLoc = 0;
-
+	int m_projMatrixLoc,
+		m_mvMatrixLoc,
+		m_normalMatrixLoc,
+		m_lightPosLoc,
+		m_outLineLoc;
 };
 
 //added .inl

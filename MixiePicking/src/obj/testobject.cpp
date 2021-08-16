@@ -4,9 +4,6 @@
 
 TestObject::TestObject()
 {
-    //m_data.resize(2500 * 6);
-    //m_data.resize(3 * 6);
-
     const GLfloat x1 = +0.06f;
     const GLfloat y1 = -0.14f;
     const GLfloat x2 = +0.14f;

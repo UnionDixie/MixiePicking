@@ -14,12 +14,12 @@ void Loader::load(const QString& path)
     }
 }
 
-const QVector<QVector3D>& Loader::getVertexList()
+const QVector<QVector3D>& Loader::getVertexList() const
 {
 	return vertexList;
 }
 
-const QVector<unsigned int>& Loader::getTriangleList()
+const QVector<unsigned int>& Loader::getTriangleList() const
 {
 	return trianleList;
 }

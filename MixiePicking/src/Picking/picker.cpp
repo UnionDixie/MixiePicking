@@ -1,53 +1,10 @@
 #include "picker.h"
-
 #include "../MixiePicking/src/OpenglWrapper/Object/Object.h"
-
-Picker::Picker()
-{
-
-}
-
-void Picker::getEvent(QVector<QVector3D> &data, QMouseEvent *event, QMatrix4x4 &proj, QMatrix4x4 &world, QMatrix4x4 &cam)
-{
-    if (event->buttons() & Qt::LeftButton) {
-      //vMatrix.clear();
-      //vMatrix.push_back(proj);
-      //vMatrix.push_back(cam);
-      //vMatrix.push_back(world);
-
-      rayCheker(data,event,proj,world,cam,rayIntersectsTriangle);
-
-    }
-}
 
 void Picker::checkScence(std::vector<Object>& data, QMouseEvent* event, QMatrix4x4& proj, QMatrix4x4& world, QMatrix4x4& cam)
 {
     if (event->buttons() & Qt::LeftButton) {
-
-        QVector3D worldNear;
-        QVector3D rayDir = getOrgDirRay(event, proj, world, cam, worldNear);
-        isPick = false;
-        int k = 0;
-        for (auto& it : data) {
-            const auto&  vertex = it.data();
-            for (size_t i = 0; i < vertex.size() - 3; i+=3)
-            {
-                QVector3D f1 = QVector3D(vertex[i]);//a
-                QVector3D f2 = QVector3D(vertex[i + 1]);//b
-                QVector3D f3 = QVector3D(vertex[i + 2]);//c
-
-                float currIntersectionPos;
-                if (rayIntersectsTriangle(worldNear, rayDir, f1, f2, f3, &currIntersectionPos))
-                {
-                    qDebug() << "\tIntersection " << "Obj:"<< it.path <<": Triangle "
-                             << i << " intersected at ray pos " << currIntersectionPos;
-                    isPick = true;
-                    id = k;
-                }
-            }
-            k++;
-        }
-
+        rayCheker(data, event, proj, world, cam, rayIntersectsTriangle);
     }
 }
 
@@ -63,24 +20,40 @@ QVector3D Picker::getOrgDirRay(QMouseEvent *event, QMatrix4x4 &proj, QMatrix4x4 
     return rayDir;
 }
 
-void Picker::rayCheker(QVector<QVector3D> &data, QMouseEvent *event, QMatrix4x4 &proj, QMatrix4x4 &world, QMatrix4x4 &cam,
+void Picker::rayCheker(std::vector<Object> &data, QMouseEvent *event, QMatrix4x4 &proj, QMatrix4x4 &world, QMatrix4x4 &cam,
                        std::function<bool (QVector3D, QVector3D, QVector3D, QVector3D, QVector3D, float *)> rayCast)
 {
-    QVector3D worldNear;
-    QVector3D rayDir = getOrgDirRay(event,proj,world,cam,worldNear);
-    isPick  = false;
-    for(int i = 0;i <= data.size() - 3;i+=3){
-       QVector3D f1 = QVector3D(data[i]);//a
-       QVector3D f2 = QVector3D(data[i+1]);//b
-       QVector3D f3 = QVector3D(data[i+2]);//c
+    
+    isPick = false;
+    for (auto& it : data) {
+        const auto& vertex = it.data();
+        //
+        auto transfom = world * it.modelTransform;
+        QVector3D worldNear;
+        QVector3D rayDir = getOrgDirRay(event, proj, transfom, cam, worldNear);
 
-       float currIntersectionPos;
-       if (rayCast(worldNear, rayDir, f1, f2, f3, &currIntersectionPos))
-       {
-           qDebug() << "\tIntersection " << ": Triangle "
-                    << i << " intersected at ray pos " << currIntersectionPos;
-           isPick = true;
-       }
+        for (size_t i = 0; i < vertex.size() - 3; i += 3)
+        {
+            QVector3D f1 = QVector3D(vertex[i]);//a
+            QVector3D f2 = QVector3D(vertex[i + 1]);//b
+            QVector3D f3 = QVector3D(vertex[i + 2]);//c
+
+            float currIntersectionPos;
+            if (rayCast(worldNear, rayDir, f1, f2, f3, &currIntersectionPos))
+            {
+                qDebug() << "\tIntersection " << "Obj:" << it.path << ": Triangle "
+                         << i << " intersected at ray pos " << currIntersectionPos;
+                isPick = true;
+                pickObj = &it;
+            }
+        }
+    }
+    if (isPick)
+        pickObj->click();
+    if (!isPick) {
+        if (pickObj != nullptr)
+            pickObj->unclick();
+        pickObj = nullptr;
     }
 }
 

@@ -1,0 +1,33 @@
+ simpleShader.init();
+    m_vao.create();
+    QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);
+    //Setup our vertex buffer object.
+    m_logoVbo.create();
+    m_logoVbo.bind();
+    m_logoVbo.allocate(testObj.constData(), testObj.count() * sizeof(GLfloat));
+    //Store the vertex attribute bindings for the program.
+    setupVertexAttribs();
+
+     m_logoVbo.bind();
+    QOpenGLFunctions *f = QOpenGLContext::currentContext()->functions();
+    f->glEnableVertexAttribArray(0);
+    f->glEnableVertexAttribArray(1);
+    f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat),
+                             nullptr);
+    f->glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat),
+                             reinterpret_cast<void *>(3 * sizeof(GLfloat)));
+    m_logoVbo.release();
+
+
+        QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);
+
+    simpleShader.bind();
+
+    simpleShader.setValue("proj", m_proj);
+    simpleShader.setValue("mv", m_camera * m_world);
+    QMatrix3x3 normalMatrix = m_world.normalMatrix(); //for light
+    simpleShader.setValue("norm", normalMatrix);
+
+    //glDrawArrays(GL_TRIANGLES, 0, testObj.vertexCount());
+
+    simpleShader.release();

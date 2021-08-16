@@ -39,20 +39,12 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
 private:
-    void setupVertexAttribs();
-private:
     Picker picker;
-    TestObject testObj;
-    Shader simpleShader;
     int m_xRot = 0;
     int m_yRot = 0;
     int m_zRot = 0;
     QPoint m_lastPos;
-    QOpenGLVertexArrayObject m_vao;
-    QOpenGLBuffer m_logoVbo;
-    
-    std::vector<Object> objects;
-    
+    std::vector<Object> objects;   
     QMatrix4x4 m_proj;
     QMatrix4x4 m_camera;
     QMatrix4x4 m_world;

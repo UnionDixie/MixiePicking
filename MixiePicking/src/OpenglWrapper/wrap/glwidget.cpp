@@ -77,7 +77,7 @@ void GlWidget::initializeGL()
     m_camera.translate(0, 0, -7.0f);//!
 
     Object tmp;
-    tmp.Load(QString("data/obj/%1.txt").arg(4));
+    tmp.Load(QString(":/image/data/obj/4.txt"));
     objects.push_back(tmp);
 
 }
@@ -96,9 +96,7 @@ void GlWidget::paintGL()
     for (auto& it : objects) {
         it.draw(m_world, m_proj, m_camera);
     }
-
     qDebug() << "Draw";
-
 }
 
 void GlWidget::resizeGL(int w, int h)

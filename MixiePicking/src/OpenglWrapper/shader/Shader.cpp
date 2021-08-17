@@ -6,8 +6,8 @@ void Shader::init()
 
     m_program = new QOpenGLShaderProgram;
 
-    m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, "data/shaders/1.vs");
-    m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, "data/shaders/2.fs");
+    m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/shaders/1.vs");
+    m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shaders/2.fs");
     m_program->bindAttributeLocation("vertex", 0);
     m_program->bindAttributeLocation("normal", 1);
     m_program->link();

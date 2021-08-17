@@ -13,6 +13,9 @@ SOURCES += \
     src/OpenglWrapper/wrap/glwidget.cpp \
     src/Picking/picker.cpp \
     src/main.cpp \
+    src/OpenglWrapper/Shader/Shader.cpp \
+    src/OpenglWrapper/Object/object.cpp \
+    src/OpenglWrapper/Object/Loader/Loader.cpp \
     src/mainwindow.cpp \
     src/obj/testobject.cpp
 
@@ -22,6 +25,9 @@ HEADERS += \
     src/Picking/picker.h \
     src/mainwindow.h \
     src/obj/testobject.h
+    src/OpenglWrapper/Shader/Shader.h
+    src/OpenglWrapper/Object/object.h
+    src/OpenglWrapper/Object/Loader/Loader.h
 
 LIBS += -lopengl32
 
@@ -29,3 +35,7 @@ LIBS += -lopengl32
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    data/shaderPack.qrc \
+    resPack.qrc

@@ -44,7 +44,6 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     ySlider->setValue(345 * 16);
     zSlider->setValue(0 * 16);
 
-    setWindowTitle("TestPicking!!!");//not work!! fix
 }
 
 void Window::keyPressEvent(QKeyEvent *event)

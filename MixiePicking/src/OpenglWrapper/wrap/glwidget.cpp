@@ -79,7 +79,8 @@ void GlWidget::initializeGL()
     Object tmp;
     tmp.Load(QString(":/image/data/obj/4.txt"));
     objects.push_back(tmp);
-
+    objects.push_back(tmp);
+    objects.back().move(QVector3D(0.5,1,0.5));
 }
 
 void GlWidget::paintGL()

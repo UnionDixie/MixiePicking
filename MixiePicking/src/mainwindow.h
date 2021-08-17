@@ -9,6 +9,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow() = default;
+    void test();
 public slots:
     void closeWindow();
 };

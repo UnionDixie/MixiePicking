@@ -47,7 +47,6 @@ void Object::move(const QVector3D& distance)
 
 void Object::rotate(float angleR,const QVector3D& trns)
 {
-    modelTransform.setToIdentity();
     angle = trns;
     rotateAngle = angleR;
 }

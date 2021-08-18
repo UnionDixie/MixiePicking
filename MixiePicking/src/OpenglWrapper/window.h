@@ -25,6 +25,8 @@ private:
     QSlider    *ySlider    = nullptr;
     QSlider    *zSlider    = nullptr;
     QSlider    *sSlider    = nullptr;
+    QSlider    *moveXSlider    = nullptr;
+    QSlider    *moveYSlider    = nullptr;
 };
 
 #endif // WINDOW_H

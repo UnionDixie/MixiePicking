@@ -66,12 +66,48 @@ void GlWidget::setScale(int resize)
 {
    qNormalizeAngle(resize);
    if(picker.pickObj != nullptr){
+
+
        double size = (double)(resize * 2)/(360.f * 16.f);
        picker.pickObj->scale(QVector3D(size,size,size));
    }
 
    emit scaleChanged(resize);
    update();
+}
+
+void GlWidget::setMoveX(int moveX)
+{
+    qNormalizeAngle(moveX);
+    if(picker.pickObj != nullptr){
+        double normX = (double)(moveX)/16.f;
+        double res;
+        if(normX<=180){
+            res = -(1 - normX/180);
+        }else{
+            res = normX/360;
+        }
+        picker.pickObj->move(QVector3D(res/10.f,0,0));
+    }
+    emit moveXChanged(180*16);
+    update();
+}
+
+void GlWidget::setMoveY(int moveY)
+{
+    qNormalizeAngle(moveY);
+    if(picker.pickObj != nullptr){
+        double normY = (double)(moveY)/16.f;
+        double res;
+        if(normY<=180){
+            res = -(1 - normY/180);
+        }else{
+            res = normY/360;
+        }
+        picker.pickObj->move(QVector3D(0,res/10.f,0));
+    }
+    emit moveYChanged(180*16);
+    update();
 }
 
 void GlWidget::cleanup() {}

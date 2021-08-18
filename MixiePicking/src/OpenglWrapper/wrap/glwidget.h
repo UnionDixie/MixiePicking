@@ -26,11 +26,13 @@ public slots:
     void setXRotation(int angle);
     void setYRotation(int angle);
     void setZRotation(int angle);
+    void setScale(int resize);
     void cleanup();
 signals:
     void xRotationChanged(int angle);
     void yRotationChanged(int angle);
     void zRotationChanged(int angle);
+    void scaleChanged(int resize);
 
 protected:
     void initializeGL() override;

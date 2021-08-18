@@ -17,6 +17,7 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     xSlider = createSlider();
     ySlider = createSlider();
     zSlider = createSlider();
+    sSlider = createSlider();
 
     connect(xSlider, &QSlider::valueChanged, glWidget, &GlWidget::setXRotation);
     connect(glWidget, &GlWidget::xRotationChanged, xSlider, &QSlider::setValue);
@@ -24,6 +25,9 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     connect(glWidget, &GlWidget::yRotationChanged, ySlider, &QSlider::setValue);
     connect(zSlider, &QSlider::valueChanged, glWidget, &GlWidget::setZRotation);
     connect(glWidget, &GlWidget::zRotationChanged, zSlider, &QSlider::setValue);
+
+    connect(sSlider, &QSlider::valueChanged, glWidget, &GlWidget::setScale);
+    connect(glWidget, &GlWidget::scaleChanged, sSlider, &QSlider::setValue);
 
     connect(this, &Window::closeWin, mw, &MainWindow::closeWindow);
 
@@ -33,6 +37,7 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     container->addWidget(xSlider);
     container->addWidget(ySlider);
     container->addWidget(zSlider);
+    container->addWidget(sSlider);
 
     QWidget *w = new QWidget;
     w->setLayout(container);
@@ -43,7 +48,7 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     xSlider->setValue(15 * 16);
     ySlider->setValue(345 * 16);
     zSlider->setValue(0 * 16);
-
+    sSlider->setValue(180 * 16);
 }
 
 void Window::keyPressEvent(QKeyEvent *event)

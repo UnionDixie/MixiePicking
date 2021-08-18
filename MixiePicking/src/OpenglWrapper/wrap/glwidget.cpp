@@ -62,6 +62,18 @@ void GlWidget::setZRotation(int angle)
     }
 }
 
+void GlWidget::setScale(int resize)
+{
+   qNormalizeAngle(resize);
+   if(picker.pickObj != nullptr){
+       double size = (double)(resize * 2)/(360.f * 16.f);
+       picker.pickObj->scale(QVector3D(size,size,size));
+   }
+
+   emit scaleChanged(resize);
+   update();
+}
+
 void GlWidget::cleanup() {}
 
 void GlWidget::initializeGL()

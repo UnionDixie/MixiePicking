@@ -39,6 +39,7 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
 private:
+    int width, height;
     Picker picker;
     int m_xRot = 0;
     int m_yRot = 0;

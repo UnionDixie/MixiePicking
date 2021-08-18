@@ -19,6 +19,7 @@ public:
 public:
     void checkScence(std::vector<Object>& data, QMouseEvent* event, QMatrix4x4& proj, QMatrix4x4& world, QMatrix4x4& cam);
     ptrPickObj pickObj = nullptr;
+    int w,h;
 private:
     bool isPick;
 private:

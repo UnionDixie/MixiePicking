@@ -80,7 +80,7 @@ void GlWidget::initializeGL()
     tmp.Load(QString(":/image/data/obj/4.txt"));
     objects.push_back(tmp);
     objects.push_back(tmp);
-    objects.back().move(QVector3D(0.5,1,0.5));
+    objects.back().move(QVector3D(-0.5,-4,0.5));
 }
 
 void GlWidget::paintGL()
@@ -102,6 +102,8 @@ void GlWidget::paintGL()
 
 void GlWidget::resizeGL(int w, int h)
 {
+    width = w;
+    height = h;
     m_proj.setToIdentity();
     m_proj.perspective(60.0f, GLfloat(w) / h, 0.1f, 100.0f);
 }
@@ -109,6 +111,8 @@ void GlWidget::resizeGL(int w, int h)
 void GlWidget::mousePressEvent(QMouseEvent *event)
 {
     qDebug() << "Pick\n";
+    picker.w = width;
+    picker.h = height;
     picker.checkScence(objects, event, m_proj, m_world, m_camera);
     m_lastPos = event->pos();
 }

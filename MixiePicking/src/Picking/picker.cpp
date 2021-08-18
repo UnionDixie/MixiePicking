@@ -10,7 +10,6 @@ void Picker::checkScence(std::vector<Object>& data, QMouseEvent* event, QMatrix4
 
 QVector3D Picker::getOrgDirRay(QMouseEvent *event, QMatrix4x4 &proj, QMatrix4x4 &world, QMatrix4x4 &cam, QVector3D &orgn)
 {
-    const int w = 400, h = 400;
     double mx = event->pos().x(), my = event->pos().y();
     QVector3D worldNear = QVector3D(float(mx), float(h - my), 0.0f).unproject(cam * world, proj, QRect(0,0,w,h));
     // Mouse world pos on far plane

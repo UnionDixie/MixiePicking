@@ -38,7 +38,7 @@ private:
 	QOpenGLVertexArrayObject vao;
 	QOpenGLBuffer vbo;
 	QOpenGLBuffer* index = nullptr;
-	QVector3D pos, angle, size;
-	float rotateAngle;
+    QVector3D pos, angle, size;
+    float rotateAngle = 0;
 };
 

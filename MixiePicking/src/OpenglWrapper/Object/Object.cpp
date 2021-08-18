@@ -38,6 +38,8 @@ void Object::Load(const QString& pathToObj)
     f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);//3 * sizeof(GLfloat)
     //f->glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat),reinterpret_cast<void*>(3 * sizeof(GLfloat))); -- normal
     vao.release();
+
+    size = QVector3D(1,1,1);
 }
 
 void Object::move(const QVector3D& distance)
@@ -73,7 +75,7 @@ void Object::transform()
     modelTransform.setToIdentity();
     modelTransform.translate(pos);
     modelTransform.rotate(rotateAngle, angle);
-    //modelTransform.scale(0.5, 0.5, 0.5);
+    modelTransform.scale(size);
 }
 
 void Object::draw(const QMatrix4x4& world, const QMatrix4x4& proj, const QMatrix4x4& cam)

@@ -40,7 +40,9 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     connect(glWidget, &GlWidget::moveYChanged, moveYSlider, &QSlider::setValue);
     //
     connect(this, &Window::closeWin, mw, &MainWindow::closeWindow);
-
+    //
+    connect(this,&Window::openFile,glWidget,&GlWidget::openFile);
+    //
     QVBoxLayout *mainLayout = new QVBoxLayout;
     QHBoxLayout *container = new QHBoxLayout;
     container->addWidget(glWidget);
@@ -74,6 +76,16 @@ void Window::keyPressEvent(QKeyEvent *event)
         emit closeWin();//close();
     else
         QWidget::keyPressEvent(event);
+}
+
+#include <QFileDialog>
+
+void Window::openNewFile()
+{
+    const QString fileName = QFileDialog::getOpenFileName(this, ("Open File"),
+                                                          nullptr, ("Object file (*.txt *.obj)"));
+    qDebug() << "Open " << fileName;
+    emit openFile(fileName);
 }
 
 QSlider *Window::createSlider()

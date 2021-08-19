@@ -4,6 +4,7 @@
 #include <QOpenGLShaderProgram>
 #include <QCoreApplication>
 #include <cmath>
+#include <QFileDialog>
 
 GlWidget::GlWidget(QWidget *parent)
     : QOpenGLWidget(parent)
@@ -66,8 +67,6 @@ void GlWidget::setScale(int resize)
 {
    qNormalizeAngle(resize);
    if(picker.pickObj != nullptr){
-
-
        double size = (double)(resize * 2)/(360.f * 16.f);
        picker.pickObj->scale(QVector3D(size,size,size));
    }
@@ -112,6 +111,14 @@ void GlWidget::setMoveY(int moveY)
 
 void GlWidget::cleanup() {}
 
+void GlWidget::openFile(const QString &fileName)
+{
+    qDebug() << "Create new obj";
+    Object tmp;
+    tmp.Load(QString(fileName));
+    userObjects.push_back(tmp);//not work
+}
+
 void GlWidget::initializeGL()
 {
     initializeOpenGLFunctions();
@@ -124,11 +131,11 @@ void GlWidget::initializeGL()
     m_camera.setToIdentity();
     m_camera.translate(0, 0, -7.0f);//!
 
+
     Object tmp;
     tmp.Load(QString(":/image/data/obj/4.txt"));
     objects.push_back(tmp);
-    objects.push_back(tmp);
-    objects.back().move(QVector3D(-0.5,-4,0.5));
+    //objects.push_back(tmp);
 }
 
 void GlWidget::paintGL()
@@ -142,7 +149,11 @@ void GlWidget::paintGL()
     m_world.rotate(m_yRot / 16.0f, 0, 1, 0);
     m_world.rotate(m_zRot / 16.0f, 0, 0, 1);
 
+    qDebug() << userObjects.size();
     for (auto& it : objects) {
+        it.draw(m_world, m_proj, m_camera);
+    }
+    for (auto& it : userObjects) {
         it.draw(m_world, m_proj, m_camera);
     }
     qDebug() << "Draw";

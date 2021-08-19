@@ -14,8 +14,11 @@ public:
     explicit Window(MainWindow *mw = nullptr);
 protected:
     void keyPressEvent(QKeyEvent *event) override;
+public slots:
+    void openNewFile();
 signals:
     void closeWin();
+    void openFile(const QString& fileName);
 private:
      QSlider *createSlider();
 private:

@@ -30,6 +30,7 @@ public slots:
     void setMoveX(int moveX);
     void setMoveY(int moveY);
     void cleanup();
+    void openFile(const QString& fileName);
 signals:
     void xRotationChanged(int angle);
     void yRotationChanged(int angle);
@@ -50,7 +51,8 @@ private:
     int m_yRot = 0;
     int m_zRot = 0;
     QPoint m_lastPos;
-    std::vector<Object> objects;   
+    std::vector<Object> objects;
+    std::vector<Object> userObjects;
     QMatrix4x4 m_proj;
     QMatrix4x4 m_camera;
     QMatrix4x4 m_world;

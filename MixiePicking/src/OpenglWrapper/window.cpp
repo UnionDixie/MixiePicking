@@ -23,6 +23,8 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     moveXSlider = createSlider();
     moveYSlider = createSlider();
 
+    listWidget = new QListWidget(this);
+
     connect(xSlider, &QSlider::valueChanged, glWidget, &GlWidget::setXRotation);
     connect(glWidget, &GlWidget::xRotationChanged, xSlider, &QSlider::setValue);
     connect(ySlider, &QSlider::valueChanged, glWidget, &GlWidget::setYRotation);
@@ -43,6 +45,9 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     //
     connect(this,&Window::openFile,glWidget,&GlWidget::openFile);
     //
+    connect(listWidget,&QListWidget::itemClicked,glWidget,&GlWidget::listItemClicked);
+    connect(glWidget,&GlWidget::addItemToList,this,&Window::addItemOnList);
+    //
     QVBoxLayout *mainLayout = new QVBoxLayout;
     QHBoxLayout *container = new QHBoxLayout;
     container->addWidget(glWidget);
@@ -52,6 +57,8 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     container->addWidget(sSlider);
     container->addWidget(moveXSlider);
     container->addWidget(moveYSlider);
+
+    container->addWidget(listWidget);
 
     QWidget *w = new QWidget;
     w->setLayout(container);
@@ -86,6 +93,11 @@ void Window::openNewFile()
                                                           nullptr, ("Object file (*.txt *.obj)"));
     qDebug() << "Open " << fileName;
     emit openFile(fileName);
+}
+
+void Window::addItemOnList(const QString& nameItem)
+{
+    listWidget->addItem(nameItem);
 }
 
 QSlider *Window::createSlider()

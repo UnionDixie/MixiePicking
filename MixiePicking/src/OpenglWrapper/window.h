@@ -2,6 +2,7 @@
 #define WINDOW_H
 
 #include <QWidget>
+#include <QListWidget>
 
 class QSlider;
 class GlWidget;
@@ -16,6 +17,7 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 public slots:
     void openNewFile();
+    void addItemOnList(const QString& nameItem);
 signals:
     void closeWin();
     void openFile(const QString& fileName);
@@ -30,6 +32,7 @@ private:
     QSlider    *sSlider    = nullptr;
     QSlider    *moveXSlider    = nullptr;
     QSlider    *moveYSlider    = nullptr;
+    QListWidget* listWidget = nullptr;
 };
 
 #endif // WINDOW_H

@@ -49,7 +49,7 @@ void Picker::rayCheker(std::vector<Object> &data, QMouseEvent *event, QMatrix4x4
     }
     if (isPick)
         pickObj->click();
-    if (!isPick) {
+    else {
         if (pickObj != nullptr)
             pickObj->unclick();
         pickObj = nullptr;

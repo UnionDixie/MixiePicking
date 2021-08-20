@@ -119,6 +119,14 @@ void GlWidget::openFile(const QString &fileName)
     userObjects.push_back(tmp);//not work
 }
 
+void GlWidget::listItemClicked(QListWidgetItem *item)
+{
+    if(item != nullptr){
+        scenceTree[item->text()]->click();
+        picker.pickObj = &(*scenceTree[item->text()]);
+    }
+}
+
 void GlWidget::initializeGL()
 {
     initializeOpenGLFunctions();
@@ -135,7 +143,8 @@ void GlWidget::initializeGL()
     Object tmp;
     tmp.Load(QString(":/image/data/obj/4.txt"));
     objects.push_back(tmp);
-    //objects.push_back(tmp);
+    scenceTree["TeaPot"] = --objects.end();
+    emit addItemToList("TeaPot");
 }
 
 void GlWidget::paintGL()
@@ -191,6 +200,10 @@ void GlWidget::mouseMoveEvent(QMouseEvent *event)
        }
        else {
 
+       }
+   }else{
+       for (auto& it : objects) {
+           it.unclick();
        }
    }
    

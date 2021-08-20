@@ -6,6 +6,7 @@
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
 #include <QMatrix4x4>
+#include <QListWidgetItem>
 
 #include "../MixiePicking/src/Picking/picker.h"
 #include "../MixiePicking/src/obj/testobject.h"
@@ -31,6 +32,7 @@ public slots:
     void setMoveY(int moveY);
     void cleanup();
     void openFile(const QString& fileName);
+    void listItemClicked(QListWidgetItem* item);
 signals:
     void xRotationChanged(int angle);
     void yRotationChanged(int angle);
@@ -38,6 +40,7 @@ signals:
     void scaleChanged(int resize);
     void moveXChanged(int moveX);
     void moveYChanged(int moveY);
+    void addItemToList(const QString& name);
 protected:
     void initializeGL() override;
     void paintGL() override;
@@ -45,6 +48,7 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
 private:
+    QMap<QString,std::vector<Object>::iterator> scenceTree;
     int width, height;
     Picker picker;
     int m_xRot = 0;

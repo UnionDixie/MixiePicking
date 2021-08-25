@@ -70,7 +70,6 @@ void GlWidget::setScale(int resize)
        double size = (double)(resize * 2)/(360.f * 16.f);
        picker.pickObj->scale(QVector3D(size,size,size));
    }
-
    emit scaleChanged(resize);
    update();
 }
@@ -121,6 +120,7 @@ void GlWidget::openFile(const QString &fileName)
 
 void GlWidget::listItemClicked(QListWidgetItem *item)
 {
+    qDebug() << "Clicked " << item;
     if(item != nullptr){
         scenceTree[item->text()]->click();
         picker.pickObj = &(*scenceTree[item->text()]);
@@ -143,6 +143,7 @@ void GlWidget::initializeGL()
     Object tmp;
     tmp.Load(QString(":/image/data/obj/4.txt"));
     objects.push_back(tmp);
+    objects.back().rotate(150,QVector3D(1,0,0));
     scenceTree["TeaPot"] = --objects.end();
     emit addItemToList("TeaPot");
 }
@@ -182,6 +183,14 @@ void GlWidget::mousePressEvent(QMouseEvent *event)
     picker.w = width;
     picker.h = height;
     picker.checkScence(objects, event, m_proj, m_world, m_camera);
+    if (picker.pickObj != nullptr) {
+        //
+    }else{
+        for (auto& it : objects) {
+            it.unclick();
+        }
+    }
+
     m_lastPos = event->pos();
 }
 
@@ -189,6 +198,7 @@ void GlWidget::mouseMoveEvent(QMouseEvent *event)
 {
    int dx = event->pos().x() - m_lastPos.x();
    int dy = event->pos().y() - m_lastPos.y();
+   qDebug() << "Move:" << dx << dy;
    if (picker.pickObj != nullptr) {
        if (event->buttons() & Qt::LeftButton) {
            setXRotation(m_xRot + 8 * dy);
@@ -198,9 +208,10 @@ void GlWidget::mouseMoveEvent(QMouseEvent *event)
            setXRotation(m_xRot + 8 * dy);
            setZRotation(m_zRot + 8 * dx);
        }
-       else {
-
-       }
+      // float x = event->pos().x(),
+      //       y = event->pos().y();
+      //picker.pickObj->move(QVector2D(dx,dy));
+      //
    }else{
        for (auto& it : objects) {
            it.unclick();

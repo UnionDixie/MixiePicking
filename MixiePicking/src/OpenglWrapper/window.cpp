@@ -12,6 +12,8 @@
 
 Window::Window(MainWindow *mw) : mainWindow(mw)
 {
+    setMouseTracking(true);
+
     glWidget = new GlWidget;
 
     xSlider = createSlider();
@@ -31,7 +33,7 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     connect(glWidget, &GlWidget::yRotationChanged, ySlider, &QSlider::setValue);
     connect(zSlider, &QSlider::valueChanged, glWidget, &GlWidget::setZRotation);
     connect(glWidget, &GlWidget::zRotationChanged, zSlider, &QSlider::setValue);
-
+    //
     connect(sSlider, &QSlider::valueChanged, glWidget, &GlWidget::setScale);
     connect(glWidget, &GlWidget::scaleChanged, sSlider, &QSlider::setValue);
     //

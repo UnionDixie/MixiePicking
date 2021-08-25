@@ -47,6 +47,7 @@ void Picker::rayCheker(std::vector<Object> &data, QMouseEvent *event, QMatrix4x4
             }
         }
     }
+    qDebug() << isPick << " " << pickObj;
     if (isPick)
         pickObj->click();
     else {

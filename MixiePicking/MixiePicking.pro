@@ -16,15 +16,13 @@ SOURCES += \
     src/OpenglWrapper/Shader/Shader.cpp \
     src/OpenglWrapper/Object/object.cpp \
     src/OpenglWrapper/Object/Loader/Loader.cpp \
-    src/mainwindow.cpp \
-    src/obj/testobject.cpp
+    src/mainwindow.cpp
 
 HEADERS += \
     src/OpenglWrapper/window.h \
     src/OpenglWrapper/wrap/glwidget.h \
     src/Picking/picker.h \
-    src/mainwindow.h \
-    src/obj/testobject.h
+    src/mainwindow.h
     src/OpenglWrapper/Shader/Shader.h
     src/OpenglWrapper/Object/object.h
     src/OpenglWrapper/Object/Loader/Loader.h

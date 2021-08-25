@@ -26,6 +26,7 @@ public:
 	void move(const QVector3D& distance);
 	void rotate(float angle, const QVector3D& newAngle);
 	void scale(const QVector3D& newSize);
+    void setPos(const QVector2D& newPos);
 public:
 	QString path;
 	QMatrix4x4 modelTransform;

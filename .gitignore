@@ -76,3 +76,4 @@ Thumbs.db
 /MixiePicking/.vs/
 /MixiePicking/debug/
 /MixiePicking/release/
+*.stash

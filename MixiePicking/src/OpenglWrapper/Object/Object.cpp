@@ -58,6 +58,11 @@ void Object::scale(const QVector3D& newSize)
     size = newSize;
 }
 
+void Object::setPos(const QVector2D &newPos)
+{
+    pos = QVector3D(newPos,pos.z());
+}
+
 void Object::update(const QMatrix4x4& world, const QMatrix4x4& proj, const QMatrix4x4& cam)
 {
     transform();
@@ -96,13 +101,13 @@ void Object::draw(const QMatrix4x4& world, const QMatrix4x4& proj, const QMatrix
 void Object::click()
 {
     shader.bind();
-    shader.setValue("pick", QVector3D(1, 0, 0));
+    shader.setValue("pick", QVector3D(0, 0, 0));
     shader.release();
 }
 
 void Object::unclick()
 {
     shader.bind();
-    shader.setValue("def", QVector3D(0, 1, 0));
+    shader.setValue("def", QVector3D(1, 1, 1));
     shader.release();
 }

@@ -21,7 +21,7 @@ void Shader::init()
 
     // Light position is fixed.
     m_program->setUniformValue(m_lightPosLoc, QVector3D(0, 0, 70));
-    m_program->setUniformValue(m_outLineLoc, QVector3D(0, 1, 0));
+    m_program->setUniformValue(m_outLineLoc, QVector3D(1, 1, 1));
 
     release();
 }

@@ -38,6 +38,6 @@ inline void Shader::setValue(QString id, const T& value)
 		m_program->setUniformValue(m_normalMatrixLoc, value);
 	else if (id == "pick")
 		m_program->setUniformValue(m_outLineLoc, value);
-	else 
+    else if (id == "def")
 		m_program->setUniformValue(m_outLineLoc, value);
 }

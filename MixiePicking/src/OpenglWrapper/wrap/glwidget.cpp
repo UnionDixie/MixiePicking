@@ -117,19 +117,19 @@ void GlWidget::openFile(const QString &fileName)
     Object tmp;
     tmp.Load(fileName);
     objects.push_back(tmp);
+    emit addItemToList(tmp.path);
 }
 
 void GlWidget::listItemClicked(QListWidgetItem *item)
 {
     qDebug() << "Clicked " << item;
     if(item != nullptr){
-        //auto it = scenceTree[item->text()];
-        //if(it != scenceTree.end()){
-        //    it->click();
-        //    picker.pickObj = &(*scenceTree[item->text()]);
-        //}
-        //scenceTree["TeaPot"] = --objects.end();
-        //emit addItemToList("TeaPot");
+        for (auto& it : objects) {
+            if(item->text() == it.path){
+                it.click();
+                picker.pickObj = &it;
+            }
+        }
     }
 }
 
@@ -151,7 +151,7 @@ void GlWidget::initializeGL()
     tmp.Load(QString(":/image/data/obj/4.txt"));
     objects.push_back(tmp);
     objects.back().rotate(150,QVector3D(1,0,0));
-
+    emit addItemToList(tmp.path);
 }
 
 void GlWidget::paintGL()

@@ -9,7 +9,6 @@
 #include <QListWidgetItem>
 
 #include "../MixiePicking/src/Picking/picker.h"
-#include "../MixiePicking/src/obj/testobject.h"
 #include "../MixiePicking/src/OpenglWrapper/shader/Shader.h"
 #include "../MixiePicking/src/OpenglWrapper/Object/Object.h"
 
@@ -56,7 +55,6 @@ private:
     int m_zRot = 0;
     QPoint m_lastPos;
     std::vector<Object> objects;
-    std::vector<Object> userObjects;
     QMatrix4x4 m_proj;
     QMatrix4x4 m_camera;
     QMatrix4x4 m_world;

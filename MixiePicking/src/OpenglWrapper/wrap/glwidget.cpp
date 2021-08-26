@@ -112,20 +112,28 @@ void GlWidget::cleanup() {}
 
 void GlWidget::openFile(const QString &fileName)
 {
-    qDebug() << "Create new obj";
+    makeCurrent();
+    qDebug() << "Open " << fileName;
     Object tmp;
-    tmp.Load(QString(fileName));
-    userObjects.push_back(tmp);//not work
+    tmp.Load(fileName);
+    objects.push_back(tmp);
 }
 
 void GlWidget::listItemClicked(QListWidgetItem *item)
 {
     qDebug() << "Clicked " << item;
     if(item != nullptr){
-        scenceTree[item->text()]->click();
-        picker.pickObj = &(*scenceTree[item->text()]);
+        //auto it = scenceTree[item->text()];
+        //if(it != scenceTree.end()){
+        //    it->click();
+        //    picker.pickObj = &(*scenceTree[item->text()]);
+        //}
+        //scenceTree["TeaPot"] = --objects.end();
+        //emit addItemToList("TeaPot");
     }
 }
+
+
 
 void GlWidget::initializeGL()
 {
@@ -139,13 +147,11 @@ void GlWidget::initializeGL()
     m_camera.setToIdentity();
     m_camera.translate(0, 0, -7.0f);//!
 
-
     Object tmp;
     tmp.Load(QString(":/image/data/obj/4.txt"));
     objects.push_back(tmp);
     objects.back().rotate(150,QVector3D(1,0,0));
-    scenceTree["TeaPot"] = --objects.end();
-    emit addItemToList("TeaPot");
+
 }
 
 void GlWidget::paintGL()
@@ -159,14 +165,10 @@ void GlWidget::paintGL()
     m_world.rotate(m_yRot / 16.0f, 0, 1, 0);
     m_world.rotate(m_zRot / 16.0f, 0, 0, 1);
 
-    qDebug() << userObjects.size();
+    qDebug() << "Draw " << objects.size();
     for (auto& it : objects) {
         it.draw(m_world, m_proj, m_camera);
     }
-    for (auto& it : userObjects) {
-        it.draw(m_world, m_proj, m_camera);
-    }
-    qDebug() << "Draw";
 }
 
 void GlWidget::resizeGL(int w, int h)
@@ -184,7 +186,7 @@ void GlWidget::mousePressEvent(QMouseEvent *event)
     picker.h = height;
     picker.checkScence(objects, event, m_proj, m_world, m_camera);
     if (picker.pickObj != nullptr) {
-        //
+        picker.pickObj->click();
     }else{
         for (auto& it : objects) {
             it.unclick();
@@ -208,10 +210,6 @@ void GlWidget::mouseMoveEvent(QMouseEvent *event)
            setXRotation(m_xRot + 8 * dy);
            setZRotation(m_zRot + 8 * dx);
        }
-      // float x = event->pos().x(),
-      //       y = event->pos().y();
-      //picker.pickObj->move(QVector2D(dx,dy));
-      //
    }else{
        for (auto& it : objects) {
            it.unclick();

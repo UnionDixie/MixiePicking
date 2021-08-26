@@ -9,11 +9,10 @@
 #include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QApplication>
+#include <QFileDialog>
 
 Window::Window(MainWindow *mw) : mainWindow(mw)
 {
-    setMouseTracking(true);
-
     glWidget = new GlWidget;
 
     xSlider = createSlider();
@@ -76,7 +75,6 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
 
     moveXSlider->setValue(180 * 16);
     moveYSlider->setValue(180 * 16);
-
 }
 
 void Window::keyPressEvent(QKeyEvent *event)
@@ -87,13 +85,10 @@ void Window::keyPressEvent(QKeyEvent *event)
         QWidget::keyPressEvent(event);
 }
 
-#include <QFileDialog>
-
 void Window::openNewFile()
 {
     const QString fileName = QFileDialog::getOpenFileName(this, ("Open File"),
                                                           nullptr, ("Object file (*.txt *.obj)"));
-    qDebug() << "Open " << fileName;
     emit openFile(fileName);
 }
 

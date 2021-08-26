@@ -15,6 +15,11 @@ const QVector<QVector3D>& Object::data() const
     return loader.getVertexList();
 }
 
+const QVector<unsigned int> &Object::dataTrinagles() const
+{
+    return loader.getTriangleList();
+}
+
 void Object::Load(const QString& pathToObj)
 {
     //

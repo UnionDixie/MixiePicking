@@ -19,6 +19,7 @@ public:
 	~Object() = default;
 public:
 	const QVector<QVector3D>& data() const;
+    const QVector<unsigned int> &dataTrinagles() const;
 	void Load(const QString& pathToObj);
 	void draw(const QMatrix4x4& world, const QMatrix4x4& proj, const QMatrix4x4& cam);
 	void click();

@@ -36,9 +36,9 @@ void Loader::add(const QString& row)
         vertexList.push_back(strToV3(row));
     else if (row.front() == 'f') {
         auto values = row.split(" ");
-        unsigned int x = values[1].toDouble(), y = values[2].toDouble(), z = values[3].toDouble();
-        trianleList.push_back(x);
-        trianleList.push_back(y);
-        trianleList.push_back(z);
+        unsigned int f1 = values[1].toDouble(), f2 = values[2].toDouble(), f3 = values[3].toDouble();
+        trianleList.push_back(f1 - 1);
+        trianleList.push_back(f2 - 1);
+        trianleList.push_back(f3 - 1);
     }
 }

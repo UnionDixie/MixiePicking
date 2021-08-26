@@ -31,11 +31,11 @@ void Picker::rayCheker(std::vector<Object> &data, QMouseEvent *event, QMatrix4x4
         QVector3D worldNear;
         QVector3D rayDir = getOrgDirRay(event, proj, transfom, cam, worldNear);
 
-        for (size_t i = 0; i < vertex.size() - 3; i += 3)
+        for (size_t i = 0; i <= vertex.size() - 3; i += 3)
         {
-            QVector3D f1 = QVector3D(vertex[i]);//a
-            QVector3D f2 = QVector3D(vertex[i + 1]);//b
-            QVector3D f3 = QVector3D(vertex[i + 2]);//c
+            QVector3D f1(vertex[i]);//a
+            QVector3D f2(vertex[i + 1]);//b
+            QVector3D f3(vertex[i + 2]);//c
 
             float currIntersectionPos;
             if (rayCast(worldNear, rayDir, f1, f2, f3, &currIntersectionPos))
@@ -48,11 +48,7 @@ void Picker::rayCheker(std::vector<Object> &data, QMouseEvent *event, QMatrix4x4
         }
     }
     qDebug() << isPick << " " << pickObj;
-    if (isPick)
-        pickObj->click();
-    else {
-        if (pickObj != nullptr)
-            pickObj->unclick();
+    if (!isPick){
         pickObj = nullptr;
     }
 }

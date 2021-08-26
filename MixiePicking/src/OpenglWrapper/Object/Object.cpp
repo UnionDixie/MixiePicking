@@ -2,7 +2,12 @@
 
 Object::Object(const Object& b)
 {
+    qDebug() << "Copy";
     Load(b.path);
+    pos = b.pos;
+    angle = b.angle;
+    size = b.size;
+    rotateAngle = b.rotateAngle;
 }
 
 const QVector<QVector3D>& Object::data() const

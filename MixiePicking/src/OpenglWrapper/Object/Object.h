@@ -21,7 +21,7 @@ public:
 	const QVector<QVector3D>& data() const;
     const QVector<unsigned int> &dataTrinagles() const;
 	void Load(const QString& pathToObj);
-	void draw(const QMatrix4x4& world, const QMatrix4x4& proj, const QMatrix4x4& cam);
+    void draw(const QMatrix4x4& world, const QMatrix4x4& proj, const QMatrix4x4& cam, bool outLine = false);
 	void click();
 	void unclick();
 	void move(const QVector3D& distance);
@@ -32,11 +32,14 @@ public:
 	QString path;
 	QMatrix4x4 modelTransform;
 private:
-	void update(const QMatrix4x4& world, const QMatrix4x4& proj, const QMatrix4x4& cam);
+    void drawIt();
+    void update(Shader* shader,const QMatrix4x4& world, const QMatrix4x4& proj, const QMatrix4x4& cam);
 	void transform();
 private:
+    bool isClicked = false;
 	Loader loader;
-	Shader shader;
+    Shader* interShader;
+    Shader* outLineShader;
 	QOpenGLVertexArrayObject vao;
 	QOpenGLBuffer vbo;
 	QOpenGLBuffer* index = nullptr;

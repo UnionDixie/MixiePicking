@@ -1,13 +1,13 @@
 #include "Shader.h"
 
-void Shader::init()
+void Shader::init(const QString &vertex, const QString &fragment)
 {
     isDestroy = false;
 
     m_program = new QOpenGLShaderProgram;
 
-    m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/shaders/1.vs");
-    m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shaders/2.fs");
+    m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, vertex);
+    m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, fragment);
     m_program->bindAttributeLocation("vertex", 0);
     m_program->bindAttributeLocation("normal", 1);
     m_program->link();

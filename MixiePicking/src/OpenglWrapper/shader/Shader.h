@@ -9,7 +9,7 @@ class Shader
 public:
 	Shader() = default;
 	~Shader() = default;
-	void init();
+    void init(const QString& vertex,const QString& fragment);
 	void bind();
 	void release();
 	template<typename T>

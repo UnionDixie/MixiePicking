@@ -27,7 +27,10 @@ void Object::Load(const QString& pathToObj)
     //load vertex and faces
     loader.load(pathToObj);
     //
-    shader.init();
+    interShader = new Shader();
+    interShader->init(":/shaders/shaders/1.vs",":/shaders/shaders/2.fs");
+    outLineShader = new Shader();
+    outLineShader->init(":/shaders/shaders/1.vs",":/shaders/shaders/3.fs");
     //
     vao.create();
     vbo.create();
@@ -73,16 +76,26 @@ void Object::setPos(const QVector2D &newPos)
     pos = QVector3D(newPos,pos.z());
 }
 
-void Object::update(const QMatrix4x4& world, const QMatrix4x4& proj, const QMatrix4x4& cam)
+void Object::drawIt()
+{
+    if (loader.getTriangleList().empty()) {
+        glDrawArrays(GL_TRIANGLES, 0, loader.getVertexList().count());
+    }
+    else {// Draw using indices
+        glDrawElements(GL_TRIANGLES, loader.getTriangleList().count(), GL_UNSIGNED_INT, nullptr);
+    }
+}
+
+void Object::update(Shader *shader, const QMatrix4x4& world, const QMatrix4x4& proj, const QMatrix4x4& cam)
 {
     transform();
-    shader.bind();
-    shader.setValue("proj", proj);
-    shader.setValue("mv", cam * world * modelTransform);//modelTransform
+    shader->bind();
+    shader->setValue("proj", proj);
+    shader->setValue("mv", cam * world * modelTransform);//modelTransform
     QMatrix3x3 normalMatrix = world.normalMatrix(); //for light world
-    shader.setValue("norm", normalMatrix);
+    shader->setValue("norm", normalMatrix);
     //shader.setValue("pick", QVector3D(0, 0, 1));
-    shader.release();
+    shader->release();
 }
 
 void Object::transform()
@@ -93,31 +106,51 @@ void Object::transform()
     modelTransform.scale(size);
 }
 
-void Object::draw(const QMatrix4x4& world, const QMatrix4x4& proj, const QMatrix4x4& cam)
+void Object::draw(const QMatrix4x4& world, const QMatrix4x4& proj, const QMatrix4x4& cam, bool outLine)
 {
-    update(world, proj, cam);
-    QOpenGLVertexArrayObject::Binder vaoBinder(&vao);
-    shader.bind();    
-    if (loader.getTriangleList().empty()) {
-        glDrawArrays(GL_TRIANGLES, 0, loader.getVertexList().count());
+    if(outLine && isClicked){
+        {//draw outLine
+            glDisable(GL_DEPTH_TEST);
+            scale(size + QVector3D(0.02f,0.02f,0.02f));
+            update(outLineShader,world, proj, cam);
+            QOpenGLVertexArrayObject::Binder vaoBinder(&vao);
+            outLineShader->bind();
+            outLineShader->setValue("pick", QVector3D(1, 0, 0));
+            drawIt();
+            outLineShader->release();
+            scale(size - QVector3D(0.02f,0.02f,0.02f));
+        }
+        {// draw object
+            glEnable(GL_DEPTH_TEST);
+            glDepthMask(GL_TRUE);
+            update(outLineShader,world, proj, cam);
+            QOpenGLVertexArrayObject::Binder vaoBinder(&vao);
+            outLineShader->bind();
+            outLineShader->setValue("def", QVector3D(1, 1, 1));
+            drawIt();
+            outLineShader->release();
+        }
+    }else{
+        update(interShader,world, proj, cam);
+        QOpenGLVertexArrayObject::Binder vaoBinder(&vao);
+        interShader->bind();
+        drawIt();
+        interShader->release();
     }
-    else {
-        // Draw cube geometry using indices
-        glDrawElements(GL_TRIANGLES, loader.getTriangleList().count(), GL_UNSIGNED_INT, nullptr);
-    }
-    shader.release();
 }
 
 void Object::click()
 {
-    shader.bind();
-    shader.setValue("pick", QVector3D(0, 0, 0));
-    shader.release();
+    isClicked = true;
+    interShader->bind();
+    interShader->setValue("pick", QVector3D(0, 0, 0));
+    interShader->release();
 }
 
 void Object::unclick()
 {
-    shader.bind();
-    shader.setValue("def", QVector3D(1, 1, 1));
-    shader.release();
+    isClicked = false;
+    interShader->bind();
+    interShader->setValue("def", QVector3D(1, 1, 1));
+    interShader->release();
 }

@@ -169,7 +169,7 @@ void GlWidget::paintGL()
 
     qDebug() << "Draw " << objects.size();
     for (auto& it : objects) {
-        it.draw(m_world, m_proj, m_camera);
+        it.draw(m_world, m_proj, m_camera,1);//0 for inter or 1 for simple red outline
     }
 }
 

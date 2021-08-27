@@ -37,8 +37,9 @@ void Picker::checkArea(int x1, int y1, int x2, int y2, std::vector<Object> &data
                     {
                         qDebug() << "\tIntersection " << "Obj:" << it.path << ": Triangle "
                                  << i << " intersected at ray pos " << currIntersectionPos;
-                        qDebug() << n << " " << z;
+                        //qDebug() << n << " " << z;
                         ints = true;
+                        it.click();
                         break;
                     }
                 }
@@ -55,8 +56,9 @@ void Picker::checkArea(int x1, int y1, int x2, int y2, std::vector<Object> &data
                     {
                         qDebug() << "\tIntersection indx " << "Obj:" << it.path << ": Triangle "
                                  << i << " intersected at ray pos " << currIntersectionPos;
-                        qDebug() << n << " " << z;
+                        //qDebug() << n << " " << z;
                         ints = true;
+                        it.click();
                         break;
                     }
                 }

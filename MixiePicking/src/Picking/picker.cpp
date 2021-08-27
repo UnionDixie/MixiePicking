@@ -8,6 +8,63 @@ void Picker::checkScence(std::vector<Object>& data, QMouseEvent* event, QMatrix4
     }
 }
 
+void Picker::checkArea(int x1, int y1, int x2, int y2, std::vector<Object> &data, QMatrix4x4 &proj, QMatrix4x4 &world, QMatrix4x4 &cam)
+{
+    qDebug() << x1 << " " << y1 << " " <<  x2 << " " << y2;
+    for(int n = x1; n <= x2;n++){
+        for(int z = y1; z <= y2;z++){
+            for (auto& it : data) {
+                bool ints = false;
+                const auto& vertex = it.data();
+                const auto& index = it.dataTrinagles();
+                //
+                auto transfom = world * it.modelTransform;
+
+                double mx = n, my = z;
+                QVector3D worldNear = QVector3D(float(mx), float(h - my), 0.0f).unproject(cam * transfom, proj, QRect(0,0,w,h));
+                //// Mouse world pos on far plane
+                QVector3D worldFar = QVector3D(float(mx), float(h - my), 1.0f).unproject(cam * transfom, proj, QRect(0,0,w,h));
+                QVector3D rayDir = (worldFar - worldNear).normalized();
+
+                for (size_t i = 0; i <= vertex.size() - 3; i += 3)
+                {
+                    QVector3D f1(vertex[i]);//a
+                    QVector3D f2(vertex[i + 1]);//b
+                    QVector3D f3(vertex[i + 2]);//c
+
+                    float currIntersectionPos;
+                    if (rayIntersectsTriangle(worldNear, rayDir, f1, f2, f3, &currIntersectionPos))
+                    {
+                        qDebug() << "\tIntersection " << "Obj:" << it.path << ": Triangle "
+                                 << i << " intersected at ray pos " << currIntersectionPos;
+                        qDebug() << n << " " << z;
+                        ints = true;
+                        break;
+                    }
+                }
+                if(ints)
+                    continue;
+                for (size_t i = 0; i <= index.size() - 3; i += 3)
+                {
+                    QVector3D f1(vertex[index[i]]);//a
+                    QVector3D f2(vertex[index[i + 1]]);//b
+                    QVector3D f3(vertex[index[i + 2] ]);//c
+
+                    float currIntersectionPos;
+                    if (rayIntersectsTriangle(worldNear, rayDir, f1, f2, f3, &currIntersectionPos))
+                    {
+                        qDebug() << "\tIntersection indx " << "Obj:" << it.path << ": Triangle "
+                                 << i << " intersected at ray pos " << currIntersectionPos;
+                        qDebug() << n << " " << z;
+                        ints = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
 QVector3D Picker::getOrgDirRay(QMouseEvent *event, QMatrix4x4 &proj, QMatrix4x4 &world, QMatrix4x4 &cam, QVector3D &orgn)
 {
     double mx = event->pos().x(), my = event->pos().y();

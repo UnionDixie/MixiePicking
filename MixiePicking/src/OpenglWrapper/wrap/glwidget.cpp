@@ -8,7 +8,9 @@
 
 GlWidget::GlWidget(QWidget *parent)
     : QOpenGLWidget(parent)
-{ }
+{
+    //setMouseTracking(true);
+}
 
 GlWidget::~GlWidget()
 {
@@ -200,7 +202,7 @@ void GlWidget::mouseMoveEvent(QMouseEvent *event)
 {
    int dx = event->pos().x() - m_lastPos.x();
    int dy = event->pos().y() - m_lastPos.y();
-   qDebug() << "Move:" << dx << dy;
+
    if (picker.pickObj != nullptr) {
        if (event->buttons() & Qt::LeftButton) {
            setXRotation(m_xRot + 8 * dy);
@@ -209,6 +211,11 @@ void GlWidget::mouseMoveEvent(QMouseEvent *event)
        else if (event->buttons() & Qt::RightButton) {
            setXRotation(m_xRot + 8 * dy);
            setZRotation(m_zRot + 8 * dx);
+       }else{
+           //qDebug() << "Move:" << dx << dy;
+           //auto posMouse = picker.getMouseXYZ(event,m_proj, m_world, m_camera);
+           //picker.pickObj->move(QVector3D(posMouse.x(),posMouse.y(),0.f));
+           //picker.pickObj->move(QVector3D(dx,dy,0.f));
        }
    }else{
        for (auto& it : objects) {
@@ -217,4 +224,18 @@ void GlWidget::mouseMoveEvent(QMouseEvent *event)
    }
    
    m_lastPos = event->pos();
+}
+
+void GlWidget::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    if (event->buttons() & Qt::LeftButton) {
+        x1 = event->pos().x();
+        y1 = event->pos().y();
+        qDebug() << "Movel:" ;
+    }else if (event->buttons() & Qt::RightButton) {
+        x2 = event->pos().x();
+        y2 = event->pos().y();
+        qDebug() << "Mover:" ;
+        picker.checkArea(x1,y1,x2,y2,objects,m_proj, m_world, m_camera);
+    }
 }

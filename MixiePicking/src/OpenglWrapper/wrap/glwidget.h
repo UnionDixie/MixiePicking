@@ -46,8 +46,10 @@ protected:
     void resizeGL(int width, int height) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent * event) override;
 private:
-    QMap<QString,std::vector<Object>::iterator> scenceTree;
+    int x1,y1,x2,y2;
+private:
     int width, height;
     Picker picker;
     int m_xRot = 0;

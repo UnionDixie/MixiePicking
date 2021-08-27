@@ -18,6 +18,9 @@ public:
     ~Picker() = default;
 public:
     void checkScence(std::vector<Object>& data, QMouseEvent* event, QMatrix4x4& proj, QMatrix4x4& world, QMatrix4x4& cam);
+
+    void checkArea(int x1,int y1,int x2,int y2,std::vector<Object>& data,QMatrix4x4& proj, QMatrix4x4& world, QMatrix4x4& cam);
+public:
     ptrPickObj pickObj = nullptr;
     int w,h;
 private:

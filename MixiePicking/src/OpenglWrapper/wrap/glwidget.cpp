@@ -68,10 +68,16 @@ void GlWidget::setZRotation(int angle)
 void GlWidget::setScale(int resize)
 {
    qNormalizeAngle(resize);
+   double size = (double)(resize * 2)/(360.f * 16.f);
    if(picker.pickObj != nullptr){
-       double size = (double)(resize * 2)/(360.f * 16.f);
        picker.pickObj->scale(QVector3D(size,size,size));
    }
+   for(auto& it : picker.objectsPool.keys()){
+       //qDebug() << it->path;
+       if(picker.objectsPool[it] == 2)
+           it->scale(QVector3D(size,size,size));
+   }
+
    emit scaleChanged(resize);
    update();
 }
@@ -135,8 +141,6 @@ void GlWidget::listItemClicked(QListWidgetItem *item)
     }
 }
 
-
-
 void GlWidget::initializeGL()
 {
     initializeOpenGLFunctions();
@@ -186,13 +190,13 @@ void GlWidget::mousePressEvent(QMouseEvent *event)
     qDebug() << "Pick\n";
     picker.w = width;
     picker.h = height;
+
+    for (auto& it : objects) {
+        it.unclick();
+    }
     picker.checkScence(objects, event, m_proj, m_world, m_camera);
     if (picker.pickObj != nullptr) {
         picker.pickObj->click();
-    }else{
-        for (auto& it : objects) {
-            it.unclick();
-        }
     }
 
     m_lastPos = event->pos();
@@ -212,10 +216,7 @@ void GlWidget::mouseMoveEvent(QMouseEvent *event)
            setXRotation(m_xRot + 8 * dy);
            setZRotation(m_zRot + 8 * dx);
        }else{
-           //qDebug() << "Move:" << dx << dy;
-           //auto posMouse = picker.getMouseXYZ(event,m_proj, m_world, m_camera);
-           //picker.pickObj->move(QVector3D(posMouse.x(),posMouse.y(),0.f));
-           //picker.pickObj->move(QVector3D(dx,dy,0.f));
+
        }
    }else{
        for (auto& it : objects) {
@@ -237,5 +238,13 @@ void GlWidget::mouseDoubleClickEvent(QMouseEvent *event)
         y2 = event->pos().y();
         qDebug() << "Mover:" ;
         picker.checkArea(x1,y1,x2,y2,objects,m_proj, m_world, m_camera);
+        for (auto& it : objects) {
+            it.unclick();
+        }
+        qDebug() << picker.objectsPool.keys().count();
+        for(auto& it : picker.objectsPool.keys()){
+            if(picker.objectsPool[it] == 2)
+                it->click();
+        }
     }
 }

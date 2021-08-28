@@ -7,6 +7,8 @@
 #include <QVector3D>
 #include <QMatrix4x4>
 #include <functional>
+#include <QMap>
+#include <chrono>
 
 class Object;
 
@@ -22,6 +24,7 @@ public:
     void checkArea(int x1,int y1,int x2,int y2,std::vector<Object>& data,QMatrix4x4& proj, QMatrix4x4& world, QMatrix4x4& cam);
 public:
     ptrPickObj pickObj = nullptr;
+    QMap<Object*,int> objectsPool;
     int w,h;
 private:
     bool isPick;

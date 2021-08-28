@@ -9,11 +9,18 @@ void Picker::checkScence(std::vector<Object>& data, QMouseEvent* event, QMatrix4
 }
 
 void Picker::checkArea(int x1, int y1, int x2, int y2, std::vector<Object> &data, QMatrix4x4 &proj, QMatrix4x4 &world, QMatrix4x4 &cam)
-{
+{ 
+    qDebug() << objectsPool.size();
+    objectsPool.clear();
+    qDebug() << objectsPool.size();
+    auto start = std::chrono::steady_clock::now();
     qDebug() << x1 << " " << y1 << " " <<  x2 << " " << y2;
     for(int n = x1; n <= x2;n++){
         for(int z = y1; z <= y2;z++){
             for (auto& it : data) {
+                if(objectsPool[&it] == 2){
+                    continue;
+                }
                 bool ints = false;
                 const auto& vertex = it.data();
                 const auto& index = it.dataTrinagles();
@@ -40,6 +47,7 @@ void Picker::checkArea(int x1, int y1, int x2, int y2, std::vector<Object> &data
                         //qDebug() << n << " " << z;
                         ints = true;
                         it.click();
+                        objectsPool[&it] = 2;
                         break;
                     }
                 }
@@ -59,12 +67,16 @@ void Picker::checkArea(int x1, int y1, int x2, int y2, std::vector<Object> &data
                         //qDebug() << n << " " << z;
                         ints = true;
                         it.click();
+                        objectsPool[&it] = 2;
                         break;
                     }
                 }
             }
         }
     }
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    qDebug() << "elapsed time: " << elapsed_seconds.count() << "s\n";
 }
 
 QVector3D Picker::getOrgDirRay(QMouseEvent *event, QMatrix4x4 &proj, QMatrix4x4 &world, QMatrix4x4 &cam, QVector3D &orgn)
@@ -121,7 +133,6 @@ void Picker::rayCheker(std::vector<Object> &data, QMouseEvent *event, QMatrix4x4
             }
         }
     }
-
 
     qDebug() << isPick << " " << pickObj;
     if (!isPick){

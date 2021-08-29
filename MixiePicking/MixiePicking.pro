@@ -4,10 +4,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
 
-# You can make your code fail to compile if it uses deprecated APIs.
-# In order to do so, uncomment the following line.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-
 SOURCES += \
     src/OpenglWrapper/window.cpp \
     src/OpenglWrapper/wrap/glwidget.cpp \
@@ -22,9 +18,9 @@ HEADERS += \
     src/OpenglWrapper/window.h \
     src/OpenglWrapper/wrap/glwidget.h \
     src/Picking/picker.h \
-    src/mainwindow.h
-    src/OpenglWrapper/Shader/Shader.h
-    src/OpenglWrapper/Object/object.h
+    src/mainwindow.h \
+    src/OpenglWrapper/Shader/Shader.h \
+    src/OpenglWrapper/Object/object.h \
     src/OpenglWrapper/Object/Loader/Loader.h
 
 LIBS += -lopengl32

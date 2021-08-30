@@ -13,3 +13,5 @@ public slots:
     void closeWindow();
 };
 #endif // MAINWINDOW_H
+
+

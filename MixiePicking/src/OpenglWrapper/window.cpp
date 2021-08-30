@@ -1,9 +1,5 @@
 #include "window.h"
 
-#include "wrap/glwidget.h"
-#include "../mainwindow.h"
-#include "../Picking/picker.h"
-
 #include <QSlider>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -11,43 +7,38 @@
 #include <QApplication>
 #include <QFileDialog>
 
+#include "wrap/glwidget.h"
+#include "../mainwindow.h"
+
 Window::Window(MainWindow *mw) : mainWindow(mw)
 {
-    glWidget = new GlWidget;
-
+    //create stuff
+    glWidget = new GLWidget;
     xSlider = createSlider();
     ySlider = createSlider();
     zSlider = createSlider();
-
-    sSlider = createSlider();
-
+    sSlider = createSlider();//scale slider
     moveXSlider = createSlider();
     moveYSlider = createSlider();
-
-    listWidget = new QListWidget(this);
-
-    connect(xSlider, &QSlider::valueChanged, glWidget, &GlWidget::setXRotation);
-    connect(glWidget, &GlWidget::xRotationChanged, xSlider, &QSlider::setValue);
-    connect(ySlider, &QSlider::valueChanged, glWidget, &GlWidget::setYRotation);
-    connect(glWidget, &GlWidget::yRotationChanged, ySlider, &QSlider::setValue);
-    connect(zSlider, &QSlider::valueChanged, glWidget, &GlWidget::setZRotation);
-    connect(glWidget, &GlWidget::zRotationChanged, zSlider, &QSlider::setValue);
-    //
-    connect(sSlider, &QSlider::valueChanged, glWidget, &GlWidget::setScale);
-    connect(glWidget, &GlWidget::scaleChanged, sSlider, &QSlider::setValue);
-    //
-    connect(moveXSlider, &QSlider::valueChanged, glWidget, &GlWidget::setMoveX);
-    connect(glWidget, &GlWidget::moveXChanged, moveXSlider, &QSlider::setValue);
-    //
-    connect(moveYSlider, &QSlider::valueChanged, glWidget, &GlWidget::setMoveY);
-    connect(glWidget, &GlWidget::moveYChanged, moveYSlider, &QSlider::setValue);
-    //
+    listOfObjects = new QListWidget(this);
+    //connectring action of sliders
+    connect(xSlider, &QSlider::valueChanged, glWidget, &GLWidget::setXRotation);
+    connect(glWidget, &GLWidget::xRotationChanged, xSlider, &QSlider::setValue);
+    connect(ySlider, &QSlider::valueChanged, glWidget, &GLWidget::setYRotation);
+    connect(glWidget, &GLWidget::yRotationChanged, ySlider, &QSlider::setValue);
+    connect(zSlider, &QSlider::valueChanged, glWidget, &GLWidget::setZRotation);
+    connect(glWidget, &GLWidget::zRotationChanged, zSlider, &QSlider::setValue);
+    connect(sSlider, &QSlider::valueChanged, glWidget, &GLWidget::setScale);
+    connect(glWidget, &GLWidget::scaleChanged, sSlider, &QSlider::setValue);
+    connect(moveXSlider, &QSlider::valueChanged, glWidget, &GLWidget::setMoveX);
+    connect(glWidget, &GLWidget::moveXChanged, moveXSlider, &QSlider::setValue);
+    connect(moveYSlider, &QSlider::valueChanged, glWidget, &GLWidget::setMoveY);
+    connect(glWidget, &GLWidget::moveYChanged, moveYSlider, &QSlider::setValue);
+    //system event
     connect(this, &Window::closeWin, mw, &MainWindow::closeWindow);
-    //
-    connect(this,&Window::openFile,glWidget,&GlWidget::openFile);
-    //
-    connect(listWidget,&QListWidget::itemClicked,glWidget,&GlWidget::listItemClicked);
-    connect(glWidget,&GlWidget::addItemToList,this,&Window::addItemOnList);
+    connect(this,&Window::openFile,glWidget,&GLWidget::openFile);
+    connect(listOfObjects, &QListWidget::itemClicked, glWidget, &GLWidget::listItemClicked);
+    connect(glWidget, &GLWidget::addItemToList, this, &Window::addItemOnList);
     //
     QVBoxLayout *mainLayout = new QVBoxLayout;
     QHBoxLayout *container = new QHBoxLayout;
@@ -58,21 +49,17 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     container->addWidget(sSlider);
     container->addWidget(moveXSlider);
     container->addWidget(moveYSlider);
-
-    container->addWidget(listWidget);
-
-    QWidget *w = new QWidget;
-    w->setLayout(container);
-    mainLayout->addWidget(w);
-
+    container->addWidget(listOfObjects);
+    //
+    QWidget *middleLayout = new QWidget;
+    middleLayout->setLayout(container);
+    mainLayout->addWidget(middleLayout);
     setLayout(mainLayout);
-    //default postinon for sliders
+    //set default value for sliders
     xSlider->setValue(15 * 16);
     ySlider->setValue(345 * 16);
     zSlider->setValue(0 * 16);
-
     sSlider->setValue(180 * 16);
-
     moveXSlider->setValue(180 * 16);
     moveYSlider->setValue(180 * 16);
 }
@@ -80,21 +67,21 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
 void Window::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Escape)
-        emit closeWin();//close();
+        emit closeWin();
     else
         QWidget::keyPressEvent(event);
 }
 
 void Window::openNewFile()
 {
-    const QString fileName = QFileDialog::getOpenFileName(this, ("Open File"),
+    const QString pathToFile = QFileDialog::getOpenFileName(this, ("Open File"),
                                                           nullptr, ("Object file (*.txt *.obj)"));
-    emit openFile(fileName);
+    emit openFile(pathToFile);
 }
 
-void Window::addItemOnList(const QString& nameItem)
+void Window::addItemOnList(const QString& newItem)
 {
-    listWidget->addItem(nameItem);
+    listOfObjects->addItem(newItem);
 }
 
 QSlider *Window::createSlider()

@@ -1,43 +1,41 @@
 #pragma once
 
 #include <QOpenGLShaderProgram>
-#include <QOpenGLWidget>
-#include <QMatrix4x4>
 
 class Shader
 {
 public:
 	Shader() = default;
-	~Shader() = default;
+	~Shader();
+public:
     void init(const QString& vertex,const QString& fragment);
 	void bind();
 	void release();
 	template<typename T>
-	void setValue(QString id,const T& value);
+	void setValue(const QString& id,const T& value);
 	void destroy();
-public:
-	bool isDestroy;
 private:
-	QOpenGLShaderProgram* m_program = nullptr;
-	int m_projMatrixLoc,
-		m_mvMatrixLoc,
-		m_normalMatrixLoc,
-		m_lightPosLoc,
-		m_outLineLoc;
+	QOpenGLShaderProgram* program = nullptr;
+	int projMatrixLoc,
+		mvMatrixLoc,
+		normalMatrixLoc,
+		lightPosLoc,
+		outLineLoc;
 };
+
 
 //added .inl
 template<typename T>
-inline void Shader::setValue(QString id, const T& value)
+inline void Shader::setValue(const QString& id, const T& value)
 {
 	if (id == "proj")
-		m_program->setUniformValue(m_projMatrixLoc, value);
+		program->setUniformValue(projMatrixLoc, value);
 	else if (id == "mv")
-		m_program->setUniformValue(m_mvMatrixLoc, value);
+		program->setUniformValue(mvMatrixLoc, value);
 	else if (id == "norm")
-		m_program->setUniformValue(m_normalMatrixLoc, value);
+		program->setUniformValue(normalMatrixLoc, value);
 	else if (id == "pick")
-		m_program->setUniformValue(m_outLineLoc, value);
+		program->setUniformValue(outLineLoc, value);
     else if (id == "def")
-		m_program->setUniformValue(m_outLineLoc, value);
+		program->setUniformValue(outLineLoc, value);
 }

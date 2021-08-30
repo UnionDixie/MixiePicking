@@ -1,28 +1,21 @@
 #include "glwidget.h"
 
 #include <QMouseEvent>
-#include <QOpenGLShaderProgram>
 #include <QCoreApplication>
-#include <cmath>
-#include <QFileDialog>
 
-GlWidget::GlWidget(QWidget *parent)
+#include "../Object/Object.h"
+
+GLWidget::GLWidget(QWidget *parent)
     : QOpenGLWidget(parent)
 {
-    //setMouseTracking(true);
 }
 
-GlWidget::~GlWidget()
-{
-    cleanup();
-}
-
-QSize GlWidget::minimumSizeHint() const
+QSize GLWidget::minimumSizeHint() const
 {
     return QSize(50, 50);
 }
 
-QSize GlWidget::sizeHint() const
+QSize GLWidget::sizeHint() const
 {
     return QSize(400, 400);
 }
@@ -35,90 +28,90 @@ static void qNormalizeAngle(int &angle)
         angle -= 360 * 16;
 }
 
-void GlWidget::setXRotation(int angle)
+void GLWidget::setXRotation(int angle)
 {
     qNormalizeAngle(angle);
-    if (angle != m_xRot) {
-        m_xRot = angle;
+    if (angle != xRot) {
+        xRot = angle;
         emit xRotationChanged(angle);
         update();
     }
 }
 
-void GlWidget::setYRotation(int angle)
+void GLWidget::setYRotation(int angle)
 {
     qNormalizeAngle(angle);
-    if (angle != m_yRot) {
-        m_yRot = angle;
+    if (angle != yRot) {
+        yRot = angle;
         emit yRotationChanged(angle);
         update();
     }
 }
 
-void GlWidget::setZRotation(int angle)
+void GLWidget::setZRotation(int angle)
 {
     qNormalizeAngle(angle);
-    if (angle != m_zRot) {
-        m_zRot = angle;
+    if (angle != zRot) {
+        zRot = angle;
         emit zRotationChanged(angle);
         update();
     }
 }
 
-void GlWidget::setScale(int resize)
+void GLWidget::setScale(int resize)
 {
    qNormalizeAngle(resize);
    double size = (double)(resize * 2)/(360.f * 16.f);
-   if(picker.pickObj != nullptr){
-       picker.pickObj->scale(QVector3D(size,size,size));
-   }
-   for(auto& it : picker.objectsPool.keys()){
-       //qDebug() << it->path;
-       if(picker.objectsPool[it] == 2)
-           it->scale(QVector3D(size,size,size));
+
+   for (const auto& it : pickObjects) {
+       if (it != nullptr) {
+           it->scale(QVector3D(size, size, size));
+       }
    }
 
    emit scaleChanged(resize);
    update();
 }
 
-void GlWidget::setMoveX(int moveX)
+double normMove(int move) {
+    double norm = (double)(move) / 16.f;
+    double res;
+    if (norm <= 180) {
+        res = -(1 - norm / 180);
+    }
+    else {
+        res = norm / 360;
+    }
+    return res;
+}
+
+void GLWidget::setMoveX(int moveX)
 {
     qNormalizeAngle(moveX);
-    if(picker.pickObj != nullptr){
-        double normX = (double)(moveX)/16.f;
-        double res;
-        if(normX<=180){
-            res = -(1 - normX/180);
-        }else{
-            res = normX/360;
+    double res = normMove(moveX);
+    for (const auto& it : pickObjects) {
+        if (it != nullptr) {
+            it->move(QVector3D(res / 10.f, 0, 0));
         }
-        picker.pickObj->move(QVector3D(res/10.f,0,0));
     }
-    emit moveXChanged(180*16);
+    emit moveXChanged(180 * 16);
     update();
 }
 
-void GlWidget::setMoveY(int moveY)
+void GLWidget::setMoveY(int moveY)
 {
     qNormalizeAngle(moveY);
-    if(picker.pickObj != nullptr){
-        double normY = (double)(moveY)/16.f;
-        double res;
-        if(normY<=180){
-            res = -(1 - normY/180);
-        }else{
-            res = normY/360;
+    double res = normMove(moveY);
+    for (const auto& it : pickObjects) {
+        if (it != nullptr) {
+            it->move(QVector3D(0, res / 10.f, 0));
         }
-        picker.pickObj->move(QVector3D(0,res/10.f,0));
     }
-    emit moveYChanged(180*16);
+    emit moveYChanged(180 * 16);
     update();
 }
 
-void GlWidget::cleanup() {}
-
-void GlWidget::openFile(const QString &fileName)
+void GLWidget::openFile(const QString &fileName)
 {
     makeCurrent();
     qDebug() << "Open " << fileName;
@@ -128,20 +121,18 @@ void GlWidget::openFile(const QString &fileName)
     emit addItemToList(tmp.path);
 }
 
-void GlWidget::listItemClicked(QListWidgetItem *item)
+void GLWidget::listItemClicked(QListWidgetItem *item)
 {
     qDebug() << "Clicked " << item;
-    if(item != nullptr){
-        for (auto& it : objects) {
-            if(item->text() == it.path){
-                it.click();
-                picker.pickObj = &it;
-            }
+    for (auto& it : objects) {
+        if (item->text() == it.path) {
+            it.click();
+            pickObjects.push_back(&it);
         }
     }
 }
 
-void GlWidget::initializeGL()
+void GLWidget::initializeGL()
 {
     initializeOpenGLFunctions();
 
@@ -149,85 +140,82 @@ void GlWidget::initializeGL()
 
     glClearColor(0, 0, 0, 1);
 
-    // Our camera never changes in this example.
-    m_camera.setToIdentity();
-    m_camera.translate(0, 0, -7.0f);//!
-
-    Object tmp;
-    tmp.Load(QString(":/image/data/obj/4.txt"));
-    objects.push_back(tmp);
-    objects.back().rotate(150,QVector3D(1,0,0));
-    emit addItemToList(tmp.path);
+    camera.setToIdentity();
+    camera.translate(0, 0, -7.0f);
 }
 
-void GlWidget::paintGL()
+void GLWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
-    m_world.setToIdentity();
-    m_world.rotate(180.0f - (m_xRot / 16.0f), 1, 0, 0);
-    m_world.rotate(m_yRot / 16.0f, 0, 1, 0);
-    m_world.rotate(m_zRot / 16.0f, 0, 0, 1);
+    world.setToIdentity();
+    world.rotate(180.0f - (xRot / 16.0f), 1, 0, 0);
+    world.rotate(yRot / 16.0f, 0, 1, 0);
+    world.rotate(zRot / 16.0f, 0, 0, 1);
 
     qDebug() << "Draw " << objects.size();
     for (auto& it : objects) {
-        it.draw(m_world, m_proj, m_camera,1);//0 for inter or 1 for simple red outline
+        it.draw(world, proj, camera, 1);//0 for inter or 1 for simple red outline
     }
 }
 
-void GlWidget::resizeGL(int w, int h)
+void GLWidget::resizeGL(int w, int h)
 {
     width = w;
     height = h;
-    m_proj.setToIdentity();
-    m_proj.perspective(60.0f, GLfloat(w) / h, 0.1f, 100.0f);
+    proj.setToIdentity();
+    proj.perspective(60.0f, GLfloat(w) / h, 0.1f, 100.0f);
 }
 
-void GlWidget::mousePressEvent(QMouseEvent *event)
+void GLWidget::mousePressEvent(QMouseEvent *event)
 {
     qDebug() << "Pick\n";
-    picker.w = width;
-    picker.h = height;
+    picker.width = width;
+    picker.height = height;
 
     for (auto& it : objects) {
         it.unclick();
     }
-    picker.checkScence(objects, event, m_proj, m_world, m_camera);
-    if (picker.pickObj != nullptr) {
-        picker.pickObj->click();
+    pickObjects = picker.checkClick(objects, event->pos().x(),event->pos().y(), proj, world, camera);
+    for (const auto& it : pickObjects) {
+        if (it != nullptr) {
+            it->click();
+        }
     }
 
-    m_lastPos = event->pos();
+    lastPos = event->pos();
 }
 
-void GlWidget::mouseMoveEvent(QMouseEvent *event)
+void GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
-   int dx = event->pos().x() - m_lastPos.x();
-   int dy = event->pos().y() - m_lastPos.y();
+   int dx = event->pos().x() - lastPos.x();
+   int dy = event->pos().y() - lastPos.y();
 
-   if (picker.pickObj != nullptr) {
-       if (event->buttons() & Qt::LeftButton) {
-           setXRotation(m_xRot + 8 * dy);
-           setYRotation(m_yRot + 8 * dx);
-       }
-       else if (event->buttons() & Qt::RightButton) {
-           setXRotation(m_xRot + 8 * dy);
-           setZRotation(m_zRot + 8 * dx);
-       }else{
-
+   if (!pickObjects.empty()) {
+       for (const auto& it : pickObjects) {
+           if (it != nullptr) {
+               if (event->buttons() & Qt::LeftButton) {
+                   setXRotation(xRot + 8 * dy);
+                   setYRotation(yRot + 8 * dx);
+               }
+               else if (event->buttons() & Qt::RightButton) {
+                   setXRotation(xRot + 8 * dy);
+                   setZRotation(zRot + 8 * dx);
+               }
+           }
        }
    }else{
-       for (auto& it : objects) {
-           it.unclick();
-       }
+      for (auto& it : objects) {
+          it.unclick();
+      }
    }
    
-   m_lastPos = event->pos();
+   lastPos = event->pos();
 }
 
-void GlWidget::mouseDoubleClickEvent(QMouseEvent *event)
+void GLWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if (event->buttons() & Qt::LeftButton) {
         x1 = event->pos().x();
@@ -237,14 +225,15 @@ void GlWidget::mouseDoubleClickEvent(QMouseEvent *event)
         x2 = event->pos().x();
         y2 = event->pos().y();
         qDebug() << "Mover:" ;
-        picker.checkArea(x1,y1,x2,y2,objects,m_proj, m_world, m_camera);
+        pickObjects = picker.checkArea(x1,y1,x2,y2,objects,proj, world, camera);
         for (auto& it : objects) {
             it.unclick();
         }
-        qDebug() << picker.objectsPool.keys().count();
-        for(auto& it : picker.objectsPool.keys()){
-            if(picker.objectsPool[it] == 2)
+        qDebug() << pickObjects.size();
+        for (const auto& it : pickObjects) {
+            if (it != nullptr) {
                 it->click();
+            }
         }
     }
 }

@@ -3,25 +3,20 @@
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
-#include <QOpenGLVertexArrayObject>
-#include <QOpenGLBuffer>
 #include <QMatrix4x4>
 #include <QListWidgetItem>
 
-#include "../MixiePicking/src/Picking/picker.h"
-#include "../MixiePicking/src/OpenglWrapper/shader/Shader.h"
-#include "../MixiePicking/src/OpenglWrapper/Object/Object.h"
+#include "../../Picker/picker.h"
+class Object;
 
-class GlWidget : public QOpenGLWidget, protected QOpenGLFunctions
+class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
     Q_OBJECT
 public:
-    GlWidget(QWidget *parent = nullptr);
-    ~GlWidget();
-
+    GLWidget(QWidget *parent = nullptr);
+    ~GLWidget() = default;
     QSize minimumSizeHint() const override;
     QSize sizeHint() const override;
-
 public slots:
     void setXRotation(int angle);
     void setYRotation(int angle);
@@ -29,7 +24,6 @@ public slots:
     void setScale(int resize);
     void setMoveX(int moveX);
     void setMoveY(int moveY);
-    void cleanup();
     void openFile(const QString& fileName);
     void listItemClicked(QListWidgetItem* item);
 signals:
@@ -48,18 +42,19 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseDoubleClickEvent(QMouseEvent * event) override;
 private:
-    int x1,y1,x2,y2;
+    int x1, y1, x2, y2;
 private:
     int width, height;
     Picker picker;
-    int m_xRot = 0;
-    int m_yRot = 0;
-    int m_zRot = 0;
-    QPoint m_lastPos;
+    int xRot = 0;
+    int yRot = 0;
+    int zRot = 0;
+    QPoint lastPos;
     std::vector<Object> objects;
-    QMatrix4x4 m_proj;
-    QMatrix4x4 m_camera;
-    QMatrix4x4 m_world;
+    std::vector<Object*> pickObjects;
+    QMatrix4x4 proj;
+    QMatrix4x4 camera;
+    QMatrix4x4 world;
 };
 
 #endif // GLWIDGET_H

@@ -7,7 +7,7 @@ CONFIG += c++11
 SOURCES += \
     src/OpenglWrapper/window.cpp \
     src/OpenglWrapper/wrap/glwidget.cpp \
-    src/Picking/picker.cpp \
+    src/Picker/picker.cpp \
     src/main.cpp \
     src/OpenglWrapper/Shader/Shader.cpp \
     src/OpenglWrapper/Object/object.cpp \
@@ -17,7 +17,7 @@ SOURCES += \
 HEADERS += \
     src/OpenglWrapper/window.h \
     src/OpenglWrapper/wrap/glwidget.h \
-    src/Picking/picker.h \
+    src/Picker/picker.h \
     src/mainwindow.h \
     src/OpenglWrapper/Shader/Shader.h \
     src/OpenglWrapper/Object/object.h \

@@ -130,6 +130,7 @@ void GLWidget::listItemClicked(QListWidgetItem *item)
             pickObjects.push_back(&it);
         }
     }
+    update();
 }
 
 void GLWidget::initializeGL()
@@ -184,8 +185,8 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
             it->click();
         }
     }
-
     lastPos = event->pos();
+    update();
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
@@ -211,8 +212,8 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
           it.unclick();
       }
    }
-   
    lastPos = event->pos();
+   update();
 }
 
 void GLWidget::mouseDoubleClickEvent(QMouseEvent *event)
@@ -236,4 +237,5 @@ void GLWidget::mouseDoubleClickEvent(QMouseEvent *event)
             }
         }
     }
+    update();
 }

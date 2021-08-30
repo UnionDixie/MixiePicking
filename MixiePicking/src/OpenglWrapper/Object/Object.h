@@ -15,7 +15,7 @@ class Object
 public:
 	Object() = default;
 	Object(const Object& b);
-	Object& operator=(const Object&) = default;
+    Object &operator=(const Object&);
 	~Object() = default;
 public:
 	//u get vertexes
@@ -31,6 +31,7 @@ public:
 	void scale(const QVector3D& newSize);
     void setPos(const QVector2D& newPos);
 	const QMatrix4x4& getModelTransform();
+    QVector<QVector3D> getAffine() const;
 public:
 	QString path;
 private:

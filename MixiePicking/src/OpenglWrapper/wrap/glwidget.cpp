@@ -115,10 +115,18 @@ void GLWidget::openFile(const QString &fileName)
 {
     makeCurrent();
     qDebug() << "Open " << fileName;
-    Object tmp;
-    tmp.Load(fileName);
-    objects.push_back(tmp);
-    emit addItemToList(tmp.path);
+    auto type =  fileName.split(".");
+    if(type[1] == "scene"){
+        objects = scene.loadScene(fileName);
+        for(const auto& it : objects){
+            emit addItemToList(it.path);
+        }
+    }else{
+        Object tmp;
+        tmp.Load(fileName);
+        objects.push_back(tmp);
+        emit addItemToList(tmp.path);
+    }
 }
 
 void GLWidget::listItemClicked(QListWidgetItem *item)
@@ -131,6 +139,11 @@ void GLWidget::listItemClicked(QListWidgetItem *item)
         }
     }
     update();
+}
+
+void GLWidget::saveScene()
+{
+    scene.saveScene(objects,"test.scene");
 }
 
 void GLWidget::initializeGL()

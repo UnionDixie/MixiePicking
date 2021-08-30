@@ -17,10 +17,12 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 public slots:
     void openNewFile();
+    void saveScene();
     void addItemOnList(const QString& newItem);
 signals:
     void closeWin();
     void openFile(const QString& pathToFile);
+    void signalSaveScene();
 private:
      QSlider *createSlider();
 private:

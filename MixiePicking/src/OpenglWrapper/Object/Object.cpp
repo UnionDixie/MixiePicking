@@ -10,6 +10,19 @@ Object::Object(const Object& b)
     rotateAngle = b.rotateAngle;
 }
 
+Object &Object::operator=(const Object & b)
+{
+    if (this == &b) {
+        return *this;
+    }
+    pos = b.pos;
+    angle = b.angle;
+    size = b.size;
+    rotateAngle = b.rotateAngle;
+    path = b.path;
+    return *this;
+}
+
 const QVector<QVector3D>& Object::data() const
 {
     return loader.getVertexList();
@@ -78,6 +91,16 @@ void Object::setPos(const QVector2D &newPos)
 const QMatrix4x4& Object::getModelTransform()
 {
     return modelTransform;
+}
+
+QVector<QVector3D> Object::getAffine() const
+{
+    QVector<QVector3D> affine;
+    affine.push_back(pos);
+    affine.push_back(angle);
+    affine.push_back(size);
+    affine.push_back(QVector3D(rotateAngle,0.f,0.f));
+    return affine;
 }
 
 void Object::drawIt()

@@ -5,6 +5,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++11
 
 SOURCES += \
+    src/OpenglWrapper/scene/scene.cpp \
     src/OpenglWrapper/window.cpp \
     src/OpenglWrapper/wrap/glwidget.cpp \
     src/Picker/picker.cpp \
@@ -15,6 +16,7 @@ SOURCES += \
     src/mainwindow.cpp
 
 HEADERS += \
+    src/OpenglWrapper/scene/scene.h \
     src/OpenglWrapper/window.h \
     src/OpenglWrapper/wrap/glwidget.h \
     src/Picker/picker.h \

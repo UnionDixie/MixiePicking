@@ -7,6 +7,8 @@
 #include <QListWidgetItem>
 
 #include "../../Picker/picker.h"
+#include "../scene/scene.h"
+
 class Object;
 
 class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions
@@ -26,6 +28,7 @@ public slots:
     void setMoveY(int moveY);
     void openFile(const QString& fileName);
     void listItemClicked(QListWidgetItem* item);
+    void saveScene();
 signals:
     void xRotationChanged(int angle);
     void yRotationChanged(int angle);
@@ -44,6 +47,7 @@ protected:
 private:
     int x1, y1, x2, y2;
 private:
+    Scene scene;
     int width, height;
     Picker picker;
     int xRot = 0;

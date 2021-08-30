@@ -39,6 +39,7 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     connect(this,&Window::openFile,glWidget,&GLWidget::openFile);
     connect(listOfObjects, &QListWidget::itemClicked, glWidget, &GLWidget::listItemClicked);
     connect(glWidget, &GLWidget::addItemToList, this, &Window::addItemOnList);
+    connect(this,&Window::signalSaveScene,glWidget,&GLWidget::saveScene);
     //
     QVBoxLayout *mainLayout = new QVBoxLayout;
     QHBoxLayout *container = new QHBoxLayout;
@@ -75,8 +76,13 @@ void Window::keyPressEvent(QKeyEvent *event)
 void Window::openNewFile()
 {
     const QString pathToFile = QFileDialog::getOpenFileName(this, ("Open File"),
-                                                          nullptr, ("Object file (*.txt *.obj)"));
+                                                          nullptr, ("Object file (*.txt *.obj *.scene)"));
     emit openFile(pathToFile);
+}
+
+void Window::saveScene()
+{
+    emit signalSaveScene();
 }
 
 void Window::addItemOnList(const QString& newItem)

@@ -47,12 +47,11 @@ void Object::Load(const QString& pathToObj)
     }
     QOpenGLFunctions* f = QOpenGLContext::currentContext()->functions();
     f->glEnableVertexAttribArray(0);
-    //f->glEnableVertexAttribArray(1);
+    //f->glEnableVertexAttribArray(1); if use light and normal
     f->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);//3 * sizeof(GLfloat)
     //f->glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat),reinterpret_cast<void*>(3 * sizeof(GLfloat))); -- normal
     vao.release();
-
-    size = QVector3D(1,1,1);
+    size = QVector3D(1, 1, 1);
 }
 
 void Object::move(const QVector3D& distance)
@@ -74,6 +73,11 @@ void Object::scale(const QVector3D& newSize)
 void Object::setPos(const QVector2D &newPos)
 {
     pos = QVector3D(newPos,pos.z());
+}
+
+const QMatrix4x4& Object::getModelTransform()
+{
+    return modelTransform;
 }
 
 void Object::drawIt()

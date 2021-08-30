@@ -16,6 +16,6 @@ private:
 	void add(const QString& row);
 private:
 	QVector<QVector3D> vertexList;
-	QVector<unsigned int> trianleList;
+	QVector<unsigned int> triangleList;
 };
 

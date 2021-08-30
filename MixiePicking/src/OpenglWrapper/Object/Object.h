@@ -8,7 +8,7 @@
 #include <QOpenGLFunctions>
 
 #include "Loader/Loader.h"
-#include "../MixiePicking/src/OpenglWrapper/shader/Shader.h"
+#include "../shader/Shader.h"
 
 class Object
 {
@@ -18,8 +18,10 @@ public:
 	Object& operator=(const Object&) = default;
 	~Object() = default;
 public:
+	//u get vertexes
 	const QVector<QVector3D>& data() const;
-    const QVector<unsigned int> &dataTrinagles() const;
+	//u get faces
+    const QVector<unsigned int>& dataTrinagles() const;
 	void Load(const QString& pathToObj);
     void draw(const QMatrix4x4& world, const QMatrix4x4& proj, const QMatrix4x4& cam, bool outLine = false);
 	void click();
@@ -28,8 +30,10 @@ public:
 	void rotate(float angle, const QVector3D& newAngle);
 	void scale(const QVector3D& newSize);
     void setPos(const QVector2D& newPos);
+	const QMatrix4x4& getModelTransform();
 public:
 	QString path;
+private:
 	QMatrix4x4 modelTransform;
 private:
     void drawIt();

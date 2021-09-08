@@ -77,7 +77,8 @@ void Window::openNewFile()
 {
     const QString pathToFile = QFileDialog::getOpenFileName(this, ("Open File"),
                                                           nullptr, ("Object file (*.txt *.obj *.scene)"));
-    emit openFile(pathToFile);
+    if(!pathToFile.isEmpty())
+        emit openFile(pathToFile);
 }
 
 void Window::saveScene()

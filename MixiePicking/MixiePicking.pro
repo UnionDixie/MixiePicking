@@ -10,7 +10,7 @@ SOURCES += \
     src/OpenglWrapper/wrap/glwidget.cpp \
     src/Picker/picker.cpp \
     src/main.cpp \
-    src/OpenglWrapper/Shader/Shader.cpp \
+    src/OpenglWrapper/shader/Shader.cpp \
     src/OpenglWrapper/Object/object.cpp \
     src/OpenglWrapper/Object/Loader/Loader.cpp \
     src/mainwindow.cpp
@@ -21,11 +21,11 @@ HEADERS += \
     src/OpenglWrapper/wrap/glwidget.h \
     src/Picker/picker.h \
     src/mainwindow.h \
-    src/OpenglWrapper/Shader/Shader.h \
+    src/OpenglWrapper/shader/Shader.h \
     src/OpenglWrapper/Object/object.h \
     src/OpenglWrapper/Object/Loader/Loader.h
 
-LIBS += -lopengl32
+LIBS += -opengl32
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

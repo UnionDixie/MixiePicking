@@ -11,8 +11,8 @@ SOURCES += \
     src/Picker/picker.cpp \
     src/main.cpp \
     src/OpenglWrapper/shader/Shader.cpp \
-    src/OpenglWrapper/Object/object.cpp \
-    src/OpenglWrapper/Object/Loader/Loader.cpp \
+    src/OpenglWrapper/object/object.cpp \
+    src/OpenglWrapper/object/loader/Loader.cpp \
     src/mainwindow.cpp
 
 HEADERS += \
@@ -22,8 +22,8 @@ HEADERS += \
     src/Picker/picker.h \
     src/mainwindow.h \
     src/OpenglWrapper/shader/Shader.h \
-    src/OpenglWrapper/Object/object.h \
-    src/OpenglWrapper/Object/Loader/Loader.h
+    src/OpenglWrapper/object/object.h \
+    src/OpenglWrapper/object/loader/Loader.h
 
 LIBS += -opengl32
 

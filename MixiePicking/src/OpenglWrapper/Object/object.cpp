@@ -138,14 +138,19 @@ void Object::draw(const QMatrix4x4& world, const QMatrix4x4& proj, const QMatrix
     if(outLine && isClicked){
         {//draw outLine
             glDisable(GL_DEPTH_TEST);
-            scale(size + QVector3D(0.02f,0.02f,0.02f));
+
+            const double scaleSize = 0.02f;
+            auto tmp = size;//sclale size + size*factor
+            scale(size + size*QVector3D(scaleSize,scaleSize,scaleSize));
+
             update(outLineShader,world, proj, cam);
             QOpenGLVertexArrayObject::Binder vaoBinder(&vao);
             outLineShader->bind();
             outLineShader->setValue("pick", QVector3D(1, 0, 0));
             drawIt();
             outLineShader->release();
-            scale(size - QVector3D(0.02f,0.02f,0.02f));
+            //restore size
+            scale(tmp);
         }
         {// draw object
             glEnable(GL_DEPTH_TEST);

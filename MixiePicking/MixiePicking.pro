@@ -25,7 +25,7 @@ HEADERS += \
     src/openglwrapper/object/object.h \
     src/openglwrapper/object/loader/loader.h
 
-LIBS += -opengl32
+LIBS += -lopengl32
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

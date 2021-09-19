@@ -7,8 +7,8 @@
 #include <QOpenGLBuffer>
 #include <QOpenGLFunctions>
 
-#include "Loader/Loader.h"
-#include "../shader/Shader.h"
+#include "loader/loader.h"
+#include "../shader/shader.h"
 
 class Object
 {

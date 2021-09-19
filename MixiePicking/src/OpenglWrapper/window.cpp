@@ -6,6 +6,7 @@
 #include <QKeyEvent>
 #include <QApplication>
 #include <QFileDialog>
+#include <QSpinBox>
 
 #include "wrap/glwidget.h"
 #include "../mainwindow.h"
@@ -21,6 +22,22 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     moveXSlider = createSlider();
     moveYSlider = createSlider();
     listOfObjects = new QListWidget(this);
+    listOfObjects->setMaximumWidth(150);
+
+    //https://doc.qt.io/qt-5/qtwidgets-widgets-spinboxes-example.html
+    QSpinBox *zoomSpinBox = new QSpinBox;
+    zoomSpinBox->setRange(0, 1000);
+    zoomSpinBox->setSingleStep(10);
+    zoomSpinBox->setSuffix("%");
+    zoomSpinBox->setSpecialValueText(tr("Automatic"));
+    zoomSpinBox->setValue(100);
+    QSpinBox *zoomSpinBox2 = new QSpinBox;
+    zoomSpinBox2->setRange(0, 1000);
+    zoomSpinBox2->setSingleStep(10);
+    zoomSpinBox2->setSuffix("%");
+    zoomSpinBox2->setSpecialValueText(tr("Automatic"));
+    zoomSpinBox2->setValue(105);
+
     //connectring action of sliders
     connect(xSlider, &QSlider::valueChanged, glWidget, &GLWidget::setXRotation);
     connect(glWidget, &GLWidget::xRotationChanged, xSlider, &QSlider::setValue);
@@ -52,8 +69,13 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     container->addWidget(moveYSlider);
     container->addWidget(listOfObjects);
     //
+    QVBoxLayout *mainLayout2 = new QVBoxLayout;
+    mainLayout2->addWidget(zoomSpinBox);
+    mainLayout2->addWidget(zoomSpinBox2);
+    container->addLayout(mainLayout2);
+    //
     QWidget *middleLayout = new QWidget;
-    middleLayout->setLayout(container);
+    middleLayout->setLayout(container);   
     mainLayout->addWidget(middleLayout);
     setLayout(mainLayout);
     //set default value for sliders

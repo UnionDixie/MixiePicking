@@ -2,7 +2,7 @@
 
 #include <QMap>
 
-#include "../OpenglWrapper/Object/Object.h"
+#include "../openglwrapper/object/object.h"
 
 std::vector<Object*> Picker::checkClick(std::vector<Object>& data, int x, int y, QMatrix4x4& proj, QMatrix4x4& world, QMatrix4x4& cam)
 {

@@ -3,7 +3,7 @@
 #include <QMouseEvent>
 #include <QCoreApplication>
 
-#include "../Object/Object.h"
+#include "../object/object.h"
 
 GLWidget::GLWidget(QWidget *parent)
     : QOpenGLWidget(parent)

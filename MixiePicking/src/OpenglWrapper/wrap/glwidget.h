@@ -6,7 +6,7 @@
 #include <QMatrix4x4>
 #include <QListWidgetItem>
 
-#include "../../Picker/picker.h"
+#include "../../picker/picker.h"
 #include "../scene/scene.h"
 
 class Object;

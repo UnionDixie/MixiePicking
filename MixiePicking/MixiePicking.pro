@@ -5,25 +5,25 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++11
 
 SOURCES += \
-    src/OpenglWrapper/scene/scene.cpp \
-    src/OpenglWrapper/window.cpp \
-    src/OpenglWrapper/wrap/glwidget.cpp \
-    src/Picker/picker.cpp \
+    src/openglwrapper/scene/scene.cpp \
+    src/openglwrapper/window.cpp \
+    src/openglwrapper/wrap/glwidget.cpp \
+    src/picker/picker.cpp \
     src/main.cpp \
-    src/OpenglWrapper/shader/Shader.cpp \
-    src/OpenglWrapper/object/object.cpp \
-    src/OpenglWrapper/object/loader/Loader.cpp \
+    src/openglwrapper/shader/shader.cpp \
+    src/openglwrapper/object/object.cpp \
+    src/openglwrapper/object/loader/loader.cpp \
     src/mainwindow.cpp
 
 HEADERS += \
-    src/OpenglWrapper/scene/scene.h \
-    src/OpenglWrapper/window.h \
-    src/OpenglWrapper/wrap/glwidget.h \
-    src/Picker/picker.h \
+    src/openglwrapper/scene/scene.h \
+    src/openglwrapper/window.h \
+    src/openglwrapper/wrap/glwidget.h \
+    src/picker/picker.h \
     src/mainwindow.h \
-    src/OpenglWrapper/shader/Shader.h \
-    src/OpenglWrapper/object/object.h \
-    src/OpenglWrapper/object/loader/Loader.h
+    src/openglwrapper/shader/shader.h \
+    src/openglwrapper/object/object.h \
+    src/openglwrapper/object/loader/loader.h
 
 LIBS += -opengl32
 

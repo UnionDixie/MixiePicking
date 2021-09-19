@@ -1,4 +1,4 @@
-#include "Loader.h"
+#include "loader.h"
 
 #include <QFile>
 

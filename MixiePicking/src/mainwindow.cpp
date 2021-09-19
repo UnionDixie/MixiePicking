@@ -4,7 +4,7 @@
 #include <QMenu>
 #include <QShortcut>
 
-#include "OpenglWrapper/window.h"
+#include "openglwrapper/window.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)

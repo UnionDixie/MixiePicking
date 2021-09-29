@@ -37,6 +37,7 @@ signals:
     void moveXChanged(int moveX);
     void moveYChanged(int moveY);
     void addItemToList(const QString& name);
+    void setActiveItemList(const QString& name);
 protected:
     void initializeGL() override;
     void paintGL() override;

@@ -189,6 +189,7 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
     picker.width = width;
     picker.height = height;
 
+    emit setActiveItemList("");
     for (auto& it : objects) {
         it.unclick();
     }
@@ -196,6 +197,7 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
     for (const auto& it : pickObjects) {
         if (it != nullptr) {
             it->click();
+            emit setActiveItemList(it->clampName);
         }
     }
     lastPos = event->pos();

@@ -19,6 +19,7 @@ public slots:
     void openNewFile();
     void saveScene();
     void addItemOnList(const QString& newItem);
+    void setActiveItem(const QString& name);
 signals:
     void closeWin();
     void openFile(const QString& pathToFile);

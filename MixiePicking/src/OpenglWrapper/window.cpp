@@ -58,6 +58,8 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     connect(glWidget, &GLWidget::addItemToList, this, &Window::addItemOnList);
     connect(this,&Window::signalSaveScene,glWidget,&GLWidget::saveScene);
     //
+    connect(glWidget, &GLWidget::setActiveItemList, this, &Window::setActiveItem);
+    //
     QVBoxLayout *mainLayout = new QVBoxLayout;
     QHBoxLayout *container = new QHBoxLayout;
     container->addWidget(glWidget);
@@ -111,6 +113,18 @@ void Window::saveScene()
 void Window::addItemOnList(const QString& newItem)
 {
     listOfObjects->addItem(newItem);
+}
+
+void Window::setActiveItem(const QString &name)
+{
+    if(name.isEmpty())
+        listOfObjects->clearSelection();
+    else{
+        auto items = listOfObjects->findItems(name,Qt::MatchExactly);
+        for(const auto& it : items){
+            it->setSelected(true);
+        }
+    }
 }
 
 QSlider *Window::createSlider()

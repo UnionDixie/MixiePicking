@@ -254,3 +254,20 @@ void GLWidget::mouseDoubleClickEvent(QMouseEvent *event)
     }
     update();
 }
+
+
+void GLWidget::wheelEvent(QWheelEvent * event)
+{
+    QPoint numDegrees = event->angleDelta() / 8;//https://doc.qt.io/qt-5/qwheelevent.html
+    if (numDegrees.y() && !pickObjects.empty()) {
+        for (const auto& it : pickObjects) {
+            if (it != nullptr) {
+                float size = numDegrees.y() / 100.f;
+                qDebug() << size;
+                it->addScale(size);
+            }
+        }
+    }
+    event->accept();
+    update();
+}

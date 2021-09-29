@@ -45,6 +45,7 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseDoubleClickEvent(QMouseEvent * event) override;
+    void wheelEvent(QWheelEvent * event) override;
 private:
     int x1, y1, x2, y2;
 private:

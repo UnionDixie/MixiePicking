@@ -79,6 +79,12 @@ void Object::rotate(float angleR,const QVector3D& trns)
     rotateAngle = angleR;
 }
 
+void Object::addScale(float addSize)
+{
+    if((addSize > 0 && size.x() < 2.f) || (addSize < 0 && size.x() > 0.2f))//+-15/100
+        size+= QVector3D(addSize,addSize,addSize);
+}
+
 void Object::scale(const QVector3D& newSize)
 {
     size = newSize;

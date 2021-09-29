@@ -28,6 +28,7 @@ public:
 	void unclick();
 	void move(const QVector3D& distance);
 	void rotate(float angle, const QVector3D& newAngle);
+    void addScale(float addSize);
 	void scale(const QVector3D& newSize);
     void setPos(const QVector2D& newPos);
 	const QMatrix4x4& getModelTransform();

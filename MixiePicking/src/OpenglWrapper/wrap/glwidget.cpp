@@ -119,13 +119,13 @@ void GLWidget::openFile(const QString &fileName)
     if(type[1] == "scene"){
         objects = scene.loadScene(fileName);
         for(const auto& it : objects){
-            emit addItemToList(it.path);
+            emit addItemToList(it.clampName);
         }
     }else{
         Object tmp;
         tmp.Load(fileName);
         objects.push_back(tmp);
-        emit addItemToList(tmp.path);
+        emit addItemToList(tmp.clampName);
     }
 }
 
@@ -133,7 +133,7 @@ void GLWidget::listItemClicked(QListWidgetItem *item)
 {
     qDebug() << "Clicked " << item;
     for (auto& it : objects) {
-        if (item->text() == it.path) {
+        if (item->text() == it.clampName) {
             it.click();
             pickObjects.push_back(&it);
         }

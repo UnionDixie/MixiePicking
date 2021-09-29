@@ -37,6 +37,7 @@ void Object::Load(const QString& pathToObj)
 {
     //
     path = pathToObj;
+    clampName = pathToObj.right(pathToObj.size() - pathToObj.lastIndexOf("/") - 1);
     //load vertex and faces
     loader.load(pathToObj);
     //

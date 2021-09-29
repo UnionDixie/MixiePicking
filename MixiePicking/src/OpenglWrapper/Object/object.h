@@ -33,7 +33,7 @@ public:
 	const QMatrix4x4& getModelTransform();
     QVector<QVector3D> getAffine() const;
 public:
-	QString path;
+    QString path, clampName;
 private:
 	QMatrix4x4 modelTransform;
 private:

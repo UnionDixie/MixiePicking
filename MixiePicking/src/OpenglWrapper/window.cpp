@@ -31,12 +31,14 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     zoomSpinBox->setSuffix("%");
     zoomSpinBox->setSpecialValueText(tr("Automatic"));
     zoomSpinBox->setValue(100);
+    zoomSpinBox->setMaximumWidth(50);
     QSpinBox *zoomSpinBox2 = new QSpinBox;
     zoomSpinBox2->setRange(0, 1000);
     zoomSpinBox2->setSingleStep(10);
     zoomSpinBox2->setSuffix("%");
     zoomSpinBox2->setSpecialValueText(tr("Automatic"));
     zoomSpinBox2->setValue(105);
+    zoomSpinBox2->setMaximumWidth(50);
 
     //connectring action of sliders
     connect(xSlider, &QSlider::valueChanged, glWidget, &GLWidget::setXRotation);

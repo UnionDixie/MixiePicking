@@ -136,39 +136,69 @@ void Object::transform()
 
 void Object::draw(const QMatrix4x4& world, const QMatrix4x4& proj, const QMatrix4x4& cam, bool outLine)
 {
-    if(outLine && isClicked){
-        {//draw outLine
-            glDisable(GL_DEPTH_TEST);
-
-            const double scaleSize = 0.02f;
-            auto tmp = size;//sclale size + size*factor
-            scale(size + size*QVector3D(scaleSize,scaleSize,scaleSize));
-
+    bool wireframe = !outLine;
+    if(wireframe && isClicked) {
+        //draw wireframe
+        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+        glLineWidth(5.f);
+        glEnable( GL_POLYGON_OFFSET_LINE );
+        glPolygonOffset( -1, -1 );//https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glPolygonOffset.xhtml
+        {
             update(outLineShader,world, proj, cam);
             QOpenGLVertexArrayObject::Binder vaoBinder(&vao);
             outLineShader->bind();
-            outLineShader->setValue("pick", QVector3D(1, 0, 0));
+            outLineShader->setValue("pick", QVector3D(0, 0, 1));
             drawIt();
             outLineShader->release();
-            //restore size
-            scale(tmp);
         }
-        {// draw object
-            glEnable(GL_DEPTH_TEST);
-            glDepthMask(GL_TRUE);
+        glDisable( GL_POLYGON_OFFSET_LINE );
+        glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+        // draw object
+        {
+            glDisable(GL_DEPTH_TEST);
             update(outLineShader,world, proj, cam);
             QOpenGLVertexArrayObject::Binder vaoBinder(&vao);
             outLineShader->bind();
-            outLineShader->setValue("def", QVector3D(1, 1, 1));
+            outLineShader->setValue("def", QVector3D(0, 1, 0));
             drawIt();
             outLineShader->release();
+            glEnable(GL_DEPTH_TEST);
         }
     }else{
-        update(interShader,world, proj, cam);
-        QOpenGLVertexArrayObject::Binder vaoBinder(&vao);
-        interShader->bind();
-        drawIt();
-        interShader->release();
+        if(outLine && isClicked){
+            {//draw outLine
+                glDisable(GL_DEPTH_TEST);
+
+                const double scaleSize = 0.02f;
+                auto tmp = size;//sclale size + size*factor
+                scale(size + size*QVector3D(scaleSize,scaleSize,scaleSize));
+
+                update(outLineShader,world, proj, cam);
+                QOpenGLVertexArrayObject::Binder vaoBinder(&vao);
+                outLineShader->bind();
+                outLineShader->setValue("pick", QVector3D(1, 0, 0));
+                drawIt();
+                outLineShader->release();
+                //restore size
+                scale(tmp);
+            }
+            {// draw object
+                glEnable(GL_DEPTH_TEST);
+                glDepthMask(GL_TRUE);
+                update(outLineShader,world, proj, cam);
+                QOpenGLVertexArrayObject::Binder vaoBinder(&vao);
+                outLineShader->bind();
+                outLineShader->setValue("def", QVector3D(1, 1, 1));
+                drawIt();
+                outLineShader->release();
+            }
+        }else{
+            update(interShader,world, proj, cam);
+            QOpenGLVertexArrayObject::Binder vaoBinder(&vao);
+            interShader->bind();
+            drawIt();
+            interShader->release();
+        }
     }
 }
 

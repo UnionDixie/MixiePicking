@@ -171,7 +171,7 @@ void GLWidget::paintGL()
 
     qDebug() << "Draw " << objects.size();
     for (auto& it : objects) {
-        it.draw(world, proj, camera, 1);//0 for inter or 1 for simple red outline
+        it.draw(world, proj, camera, 0);//0 - wireframe or 1 size  - outline
     }
 }
 

@@ -25,20 +25,20 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     listOfObjects->setMaximumWidth(150);
 
     //https://doc.qt.io/qt-5/qtwidgets-widgets-spinboxes-example.html
-    QSpinBox *zoomSpinBox = new QSpinBox;
-    zoomSpinBox->setRange(0, 1000);
-    zoomSpinBox->setSingleStep(10);
-    zoomSpinBox->setSuffix("%");
-    zoomSpinBox->setSpecialValueText(tr("Automatic"));
-    zoomSpinBox->setValue(100);
-    zoomSpinBox->setMaximumWidth(50);
-    QSpinBox *zoomSpinBox2 = new QSpinBox;
-    zoomSpinBox2->setRange(0, 1000);
-    zoomSpinBox2->setSingleStep(10);
-    zoomSpinBox2->setSuffix("%");
-    zoomSpinBox2->setSpecialValueText(tr("Automatic"));
-    zoomSpinBox2->setValue(105);
-    zoomSpinBox2->setMaximumWidth(50);
+    translateXSpinBox = new QSpinBox;
+    translateXSpinBox->setRange(-1000, 1000);
+    translateXSpinBox->setSingleStep(10);
+    translateXSpinBox->setSuffix("px");
+    translateXSpinBox->setSpecialValueText(tr("Automatic"));
+    translateXSpinBox->setValue(0);
+    translateXSpinBox->setMaximumWidth(50);
+    //QSpinBox *zoomSpinBox2 = new QSpinBox;
+    //zoomSpinBox2->setRange(0, 1000);
+    //zoomSpinBox2->setSingleStep(10);
+    //zoomSpinBox2->setSuffix("%");
+    //zoomSpinBox2->setSpecialValueText(tr("Automatic"));
+    //zoomSpinBox2->setValue(105);
+    //zoomSpinBox2->setMaximumWidth(50);
 
     //connectring action of sliders
     connect(xSlider, &QSlider::valueChanged, glWidget, &GLWidget::setXRotation);
@@ -62,6 +62,8 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     //
     connect(glWidget, &GLWidget::setActiveItemList, this, &Window::setActiveItem);
     //
+    connect(translateXSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), glWidget, &GLWidget::setMoveX);
+    //
     QVBoxLayout *mainLayout = new QVBoxLayout;
     QHBoxLayout *container = new QHBoxLayout;
     container->addWidget(glWidget);
@@ -74,8 +76,8 @@ Window::Window(MainWindow *mw) : mainWindow(mw)
     container->addWidget(listOfObjects);
     //
     QVBoxLayout *mainLayout2 = new QVBoxLayout;
-    mainLayout2->addWidget(zoomSpinBox);
-    mainLayout2->addWidget(zoomSpinBox2);
+    mainLayout2->addWidget(translateXSpinBox);
+    //mainLayout2->addWidget(zoomSpinBox2);
     container->addLayout(mainLayout2);
     //
     QWidget *middleLayout = new QWidget;
@@ -127,6 +129,30 @@ void Window::setActiveItem(const QString &name)
             it->setSelected(true);
         }
     }
+}
+
+void Window::hideGUI()
+{
+    if(!isHidegGui) {
+        xSlider->hide();
+        ySlider->hide();
+        zSlider->hide();
+        sSlider->hide();
+        moveXSlider->hide();
+        moveYSlider->hide();
+        listOfObjects->hide();
+        translateXSpinBox->hide();
+    }else {
+        xSlider->show();
+        ySlider->show();
+        zSlider->show();
+        sSlider->show();
+        moveXSlider->show();
+        moveYSlider->show();
+        listOfObjects->show();
+        translateXSpinBox->hide();
+    }
+    isHidegGui = !isHidegGui;
 }
 
 QSlider *Window::createSlider()

@@ -146,6 +146,20 @@ void GLWidget::saveScene()
     scene.saveScene(objects,"test.scene");
 }
 
+void GLWidget::spinChanged(int value)
+{
+    qDebug() << value;
+    //qNormalizeAngle(moveX);
+    //double res = normMove(moveX);
+    //for (const auto& it : pickObjects) {
+    //    if (it != nullptr) {
+    //        it->move(QVector3D(res / 10.f, 0, 0));
+    //    }
+    //}
+    //emit moveXChanged(180 * 16);
+    //update();
+}
+
 void GLWidget::initializeGL()
 {
     initializeOpenGLFunctions();
@@ -194,10 +208,15 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
         it.unclick();
     }
     pickObjects = picker.checkClick(objects, event->pos().x(),event->pos().y(), proj, world, camera);
+
+    for (const auto& it : pickObjects)
+        if (it != nullptr)
+            pickObj.push(it);
     for (const auto& it : pickObjects) {
         if (it != nullptr) {
             it->click();
             emit setActiveItemList(it->clampName);
+            break;
         }
     }
     lastPos = event->pos();
@@ -237,6 +256,14 @@ void GLWidget::mouseDoubleClickEvent(QMouseEvent *event)
         x1 = event->pos().x();
         y1 = event->pos().y();
         qDebug() << "Movel:" ;
+
+        for (auto& it : objects) {
+            it.unclick();
+        }
+        pickObj.push(pickObj.front());
+        pickObj.pop();
+        pickObj.front()->click();
+
     }else if (event->buttons() & Qt::RightButton) {
         x2 = event->pos().x();
         y2 = event->pos().y();

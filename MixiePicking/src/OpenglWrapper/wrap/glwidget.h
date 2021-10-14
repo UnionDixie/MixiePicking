@@ -5,6 +5,7 @@
 #include <QOpenGLFunctions>
 #include <QMatrix4x4>
 #include <QListWidgetItem>
+#include <queue>
 
 #include "../../picker/picker.h"
 #include "../scene/scene.h"
@@ -29,6 +30,7 @@ public slots:
     void openFile(const QString& fileName);
     void listItemClicked(QListWidgetItem* item);
     void saveScene();
+    void spinChanged(int value);
 signals:
     void xRotationChanged(int angle);
     void yRotationChanged(int angle);
@@ -58,6 +60,7 @@ private:
     QPoint lastPos;
     std::vector<Object> objects;
     std::vector<Object*> pickObjects;
+    std::queue<Object*> pickObj;
     QMatrix4x4 proj;
     QMatrix4x4 camera;
     QMatrix4x4 world;

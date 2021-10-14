@@ -7,6 +7,7 @@ class QListWidget;
 class QSlider;
 class GLWidget;
 class MainWindow;
+class QSpinBox;
 
 class Window : public QWidget
 {
@@ -20,6 +21,7 @@ public slots:
     void saveScene();
     void addItemOnList(const QString& newItem);
     void setActiveItem(const QString& name);
+    void hideGUI();
 signals:
     void closeWin();
     void openFile(const QString& pathToFile);
@@ -27,6 +29,7 @@ signals:
 private:
      QSlider *createSlider();
 private:
+    bool isHidegGui = false;
     MainWindow *mainWindow = nullptr;
     GLWidget   *glWidget   = nullptr;
     QSlider    *xSlider    = nullptr;
@@ -36,6 +39,7 @@ private:
     QSlider    *moveXSlider    = nullptr;
     QSlider    *moveYSlider    = nullptr;
     QListWidget* listOfObjects = nullptr;
+    QSpinBox* translateXSpinBox = nullptr;
 };
 
 #endif //WINDOW_H

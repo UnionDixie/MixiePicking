@@ -199,6 +199,9 @@ void GLWidget::resizeGL(int w, int h)
 
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
+    while(!pickObj.empty())
+        pickObj.pop();
+
     qDebug() << "Pick\n";
     picker.width = width;
     picker.height = height;
@@ -260,9 +263,11 @@ void GLWidget::mouseDoubleClickEvent(QMouseEvent *event)
         for (auto& it : objects) {
             it.unclick();
         }
-        pickObj.push(pickObj.front());
-        pickObj.pop();
-        pickObj.front()->click();
+        if(!pickObj.empty()) {
+            pickObj.push(pickObj.front());
+            pickObj.pop();
+            pickObj.front()->click();
+        }
 
     }else if (event->buttons() & Qt::RightButton) {
         x2 = event->pos().x();

@@ -1,12 +1,15 @@
 #include "picker.h"
 
 #include <QMap>
+#include <map>
 
 #include "../openglwrapper/object/object.h"
 
 std::vector<Object*> Picker::checkClick(std::vector<Object>& data, int x, int y, QMatrix4x4& proj, QMatrix4x4& world, QMatrix4x4& cam)
 {
     std::vector<Object*> pickObjects;
+    std::map<float, Object*> distPick;
+
     for (auto& it : data) {
         bool intersect = false;
         const auto& vertex = it.data();
@@ -27,7 +30,8 @@ std::vector<Object*> Picker::checkClick(std::vector<Object>& data, int x, int y,
             {
                 qDebug() << "\tIntersection " << "Obj:" << it.path << ": Triangle "
                          << i << " intersected at ray pos " << currIntersectionPos; 
-                pickObjects.push_back(&it);
+                //pickObjects.push_back(&it);
+                distPick[currIntersectionPos] = &it;
                 intersect = true;
                 break;
             }
@@ -45,11 +49,16 @@ std::vector<Object*> Picker::checkClick(std::vector<Object>& data, int x, int y,
             {
                 qDebug() << "\tIntersectionIndx " << "Obj:" << it.path << ": Triangle "
                          << i << " intersected at ray pos " << currIntersectionPos;
-                pickObjects.push_back(&it);
+                //pickObjects.push_back(&it);
+                distPick[currIntersectionPos] = &it;
                 break;
             }
         }
     }
+
+    for(const auto &it : distPick)
+        pickObjects.push_back(it.second);
+
     return pickObjects;
 }
 
